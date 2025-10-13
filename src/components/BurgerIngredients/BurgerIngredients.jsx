@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerIngredients.module.css';
@@ -22,11 +22,14 @@ const BurgerIngredients = ({ ingredients, openModal }) => {
   };
 
   // Группируем ингредиенты по типу, чтобы потом передать в отдельную секцию.
-  const groupedIngredients = {
-    bun: ingredients.filter((item) => item.type === 'bun'),
-    sauce: ingredients.filter((item) => item.type === 'sauce'),
-    main: ingredients.filter((item) => item.type === 'main'),
-  };
+  const groupedIngredients = useMemo(
+    () => ({
+      bun: ingredients.filter((item) => item.type === 'bun'),
+      sauce: ingredients.filter((item) => item.type === 'sauce'),
+      main: ingredients.filter((item) => item.type === 'main'),
+    }),
+    [ingredients]
+  );
 
   return (
     <section className={styles.ingredients}>

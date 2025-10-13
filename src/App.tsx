@@ -5,9 +5,7 @@ import BurgerIngredients from './components/BurgerIngredients/BurgerIngredients'
 import BurgerConstructor from './components/BurgerConstructor/BurgerConstructor';
 import IngredientDetails from './components/Modal/IngredientDetails/IngredientDetails';
 import OrderDetails from './components/Modal/OrderDetails/OrderDetails';
-
-const API_SERVER_URL = 'https://norma.nomoreparties.space/';
-const INGREDIENTS_URL = 'api/ingredients';
+import { getIngredients } from './utils/api';
 
 function App() {
   const [ingredients, setIngredients] = useState([]);
@@ -20,23 +18,12 @@ function App() {
     const fetchIngredients = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch(`${API_SERVER_URL}${INGREDIENTS_URL}`);
-
-        if (!response.ok) {
-          throw new Error(`Ошибка: ${response.status}`);
-        }
-
-        const data = await response.json();
-        if (data.success === true) {
-          setIngredients(data.data);
-          setError(null);
-        } else {
-          setIngredients([]);
-          setError('Ошибка сервера API.');
-        }
+        const data = await getIngredients();
+        setIngredients(data);
+        setError(null);
       } catch (err: any) {
-        setError(err.message);
-        console.error(`Произошла ошибка при обращении к API: ${err}`);
+        setError(err.message || err);
+        console.error('Произошла ошибка при обращении к API:', err);
       } finally {
         setIsLoading(false);
       }
