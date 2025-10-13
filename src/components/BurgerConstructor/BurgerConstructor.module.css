@@ -1,0 +1,55 @@
+.constructor {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: calc(100vh - 400px);
+  max-height: 660px;
+  min-height: 250px;
+  overflow-y: scroll;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+}
+
+.drag {
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dragPlaceholder {
+  flex: 0 0 40px;
+  width: 40px;
+}
+
+.elem {
+  flex: 1;
+}
+
+.elem > * {
+  width: 100%;
+  box-sizing: border-box;
+  background: #1c1c21;
+}
+
+.total {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 40px;
+}
+
+.totalPrice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

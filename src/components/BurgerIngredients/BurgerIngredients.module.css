@@ -1,0 +1,18 @@
+.ingredients {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.tabs {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.ingredientsList {
+  height: calc(100vh - 280px);
+  max-height: 800px;
+  min-height: 250px;
+  width: 100%;
+  overflow-y: scroll;
+}

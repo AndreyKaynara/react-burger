@@ -1,0 +1,22 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.image {
+  height: 240px;
+}
+
+.textList {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.textItem {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
