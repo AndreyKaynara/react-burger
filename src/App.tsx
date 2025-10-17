@@ -1,46 +1,38 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styles from './App.module.css';
 import AppHeader from './components/AppHeader/AppHeader';
 import BurgerIngredients from './components/BurgerIngredients/BurgerIngredients';
 import BurgerConstructor from './components/BurgerConstructor/BurgerConstructor';
 import IngredientDetails from './components/Modal/IngredientDetails/IngredientDetails';
 import OrderDetails from './components/Modal/OrderDetails/OrderDetails';
-import { getIngredients } from './utils/api';
+import { fetchIngredients } from './services/ingredientsSlice';
+import { setIngredient, clearIngredient } from './services/ingredientDetailsSlice';
+import { clearOrder } from './services/orderSlice';
 
 function App() {
-  const [ingredients, setIngredients] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [activeModal, setActiveModal] = React.useState<string | null>(null);
-  const [selectedIngredient, setSelectedIngredient] = useState(null); // данные выбранного ингредиента
+  const { data: ingredients, status, error } = useSelector((state: any) => state.ingredients);
+  const [activeModal, setActiveModal] = useState<string | null>(null);
+  const selectedIngredient = useSelector((state: any) => state.ingredientDetails.ingredient);
+
+  const dispatch = useDispatch<any>();
 
   useEffect(() => {
-    const fetchIngredients = async () => {
-      try {
-        setIsLoading(true);
-        const data = await getIngredients();
-        setIngredients(data);
-        setError(null);
-      } catch (err: any) {
-        setError(err.message || err);
-        console.error('Произошла ошибка при обращении к API:', err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchIngredients();
-  }, []);
+    if (status === 'idle') {
+      dispatch(fetchIngredients());
+    }
+  }, [status, dispatch]);
 
-  if (isLoading) {
+  if (status === 'loading') {
     return <div>Загрузка...</div>;
   }
 
-  if (error) {
+  if (status === 'failed') {
     return <div>Произошла ошибка: {error}</div>;
   }
 
   const openIngredientModal = (ingredient: any) => {
-    setSelectedIngredient(ingredient);
+    dispatch(setIngredient(ingredient));
     setActiveModal('ingredient');
   };
 
@@ -48,9 +40,14 @@ function App() {
     setActiveModal('order');
   };
 
-  const closeModal = () => {
+  const closeIngredientModal = () => {
     setActiveModal(null);
-    setSelectedIngredient(null);
+    dispatch(clearIngredient());
+  };
+
+  const closeOrderModal = () => {
+    setActiveModal(null);
+    dispatch(clearOrder());
   };
 
   return (
@@ -67,11 +64,9 @@ function App() {
           </div>
         </main>
       </div>
-      {activeModal === 'ingredient' && selectedIngredient && (
-        <IngredientDetails ingredient={selectedIngredient} onClose={closeModal} />
-      )}
+      {activeModal === 'ingredient' && selectedIngredient && <IngredientDetails onClose={closeIngredientModal} />}
 
-      {activeModal === 'order' && <OrderDetails onClose={closeModal} />}
+      {activeModal === 'order' && <OrderDetails onClose={closeOrderModal} />}
     </>
   );
 }

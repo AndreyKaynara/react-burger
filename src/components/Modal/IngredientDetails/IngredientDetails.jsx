@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import Modal from '../Modal';
 import styles from './IngredientDetails.module.css';
-import { ingredientPropType } from '../../../utils/prop-types';
 
-const IngredientDetails = ({ ingredient, onClose }) => {
+const IngredientDetails = ({ onClose }) => {
+  const ingredient = useSelector((state) => state.ingredientDetails.ingredient);
+
   return (
     <Modal title="Детали ингредиента" onClose={onClose}>
       <div className={styles.content}>
@@ -35,7 +37,6 @@ const IngredientDetails = ({ ingredient, onClose }) => {
 };
 
 IngredientDetails.propTypes = {
-  ingredient: ingredientPropType.isRequired,
   onClose: PropTypes.func.isRequired,
 };
 

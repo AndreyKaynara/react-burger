@@ -1,15 +1,37 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
 import { ConstructorElement, DragIcon, Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerConstructor.module.css';
 import scrollbarStyles from '../../styles/scrollbar.module.css';
 import { ingredientPropType } from '../../utils/prop-types';
+import { addIngredient, removeIngredient, clearConstructor } from '../../services/constuctorSlice';
+import { createOrder } from '../../services/orderSlice';
 
 const BurgerConstructor = ({ ingredients = [], openModal }) => {
-  const bun = ingredients.find((item) => item.type === 'bun');
-  const fillings = ingredients.filter((item) => item.type !== 'bun');
+  const { bun, fillings, totalPrice } = useSelector((state) => state.burgerConstructor);
+  const dispatch = useDispatch();
 
-  const totalPrice = ingredients.reduce((sum, i) => sum + (i.price || 0), 0);
+  const handleOrderClick = () => {
+    if (!bun) {
+      alert('Необходимо выбрать булку');
+      return;
+    }
+
+    // Указываем булочку дважды, так как есть верхняя и нижняя.
+    const ingredientIds = [bun._id, ...fillings.map((item) => item._id), bun._id];
+
+    dispatch(createOrder(ingredientIds))
+      .unwrap()
+      .then(() => {
+        dispatch(clearConstructor());
+        openModal();
+      })
+      .catch((error) => {
+        console.log('Ошибка заказа: ', error);
+        alert('Ошибка заказа');
+      });
+  };
 
   return (
     <section className={styles.constructor}>
@@ -32,12 +54,17 @@ const BurgerConstructor = ({ ingredients = [], openModal }) => {
 
         {/* Начинки */}
         {fillings.map((item) => (
-          <div key={item._id} className={styles.row}>
+          <div key={item.uuid} className={styles.row}>
             <div className={styles.drag}>
               <DragIcon type="primary" />
             </div>
             <div className={styles.elem}>
-              <ConstructorElement text={item.name} price={item.price} thumbnail={item.image} />
+              <ConstructorElement
+                text={item.name}
+                price={item.price}
+                thumbnail={item.image}
+                handleClose={() => dispatch(removeIngredient(item))}
+              />
             </div>
           </div>
         ))}
@@ -65,7 +92,7 @@ const BurgerConstructor = ({ ingredients = [], openModal }) => {
           <span className="text text_type_digits-medium">{totalPrice}</span>
           <CurrencyIcon type="primary" />
         </div>
-        <Button htmlType="button" type="primary" size="large" onClick={openModal}>
+        <Button htmlType="button" type="primary" size="large" onClick={handleOrderClick}>
           Оформить заказ
         </Button>
       </div>
