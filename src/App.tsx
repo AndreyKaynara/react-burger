@@ -4,8 +4,8 @@ import styles from './App.module.css';
 import AppHeader from './components/AppHeader/AppHeader';
 import BurgerIngredients from './components/BurgerIngredients/BurgerIngredients';
 import BurgerConstructor from './components/BurgerConstructor/BurgerConstructor';
-import IngredientDetails from './components/Modal/IngredientDetails/IngredientDetails';
-import OrderDetails from './components/Modal/OrderDetails/OrderDetails';
+import IngredientDetailsModal from './components/IngredientDetails/IngredientDetailsModal';
+import OrderDetailsModal from './components/OrderDetails/OrderDetailsModal';
 import { setIngredient, clearIngredient } from './services/ingredientDetailsSlice';
 import { clearOrder } from './services/orderSlice';
 
@@ -48,9 +48,9 @@ function App() {
           </div>
         </main>
       </div>
-      {activeModal === 'ingredient' && selectedIngredient && <IngredientDetails onClose={closeIngredientModal} />}
+      {activeModal === 'ingredient' && selectedIngredient && <IngredientDetailsModal onClose={closeIngredientModal} />}
 
-      {activeModal === 'order' && <OrderDetails onClose={closeOrderModal} />}
+      {activeModal === 'order' && <OrderDetailsModal onClose={closeOrderModal} />}
     </>
   );
 }
