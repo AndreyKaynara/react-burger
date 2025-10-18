@@ -5,13 +5,12 @@ import { useDrop } from 'react-dnd';
 import { ConstructorElement, Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerConstructor.module.css';
 import scrollbarStyles from '../../styles/scrollbar.module.css';
-import { ingredientPropType } from '../../utils/prop-types';
 import { addIngredient, removeIngredient, clearConstructor, reorderIngredients } from '../../services/constuctorSlice';
 import { incrementCounter, decrementCounter, resetCounters } from '../../services/ingredientsSlice';
 import { createOrder } from '../../services/orderSlice';
 import ConstructorIngredient from './ConstructorIngredient/ConstructorIngredient';
 
-const BurgerConstructor = ({ ingredients = [], openModal }) => {
+const BurgerConstructor = ({ openModal }) => {
   const { bun, fillings, totalPrice } = useSelector((state) => state.burgerConstructor);
   const dispatch = useDispatch();
 
@@ -139,7 +138,6 @@ const BurgerConstructor = ({ ingredients = [], openModal }) => {
 };
 
 BurgerConstructor.propTypes = {
-  ingredients: PropTypes.arrayOf(ingredientPropType).isRequired,
   openModal: PropTypes.func.isRequired,
 };
 

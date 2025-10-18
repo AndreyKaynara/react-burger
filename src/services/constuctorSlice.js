@@ -17,6 +17,7 @@ const constructorSlice = createSlice({
           if (state.bun) {
             state.totalPrice -= state.bun.price * 2;
           }
+          // Заменяем булочку, так как может быть только одна булочка.,
           state.bun = action.payload;
           state.totalPrice += action.payload.price * 2;
           return;

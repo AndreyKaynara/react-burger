@@ -1,18 +1,28 @@
 import React, { useState, useRef, useMemo, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerIngredients.module.css';
 import scrollbarStyles from '../../styles/scrollbar.module.css';
 import IngredientSection from './IngredientSection/IngredientSection';
-import { ingredientPropType } from '../../utils/prop-types';
+import { fetchIngredients } from '../../services/ingredientsSlice';
 
-const BurgerIngredients = ({ ingredients, openModal }) => {
+const BurgerIngredients = ({ openModal }) => {
   const [currentTab, setCurrentTab] = useState('bun');
+  const { data: ingredients, status, error } = useSelector((state) => state.ingredients);
 
   const ingredientsRef = useRef(null);
   const bunRef = useRef(null);
   const sauceRef = useRef(null);
   const mainRef = useRef(null);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (status === 'idle') {
+      dispatch(fetchIngredients());
+    }
+  }, [status, dispatch]);
 
   // Делаем ссылки на разделы списка с ингредиентами.
   const scrollTo = (type) => {
@@ -66,6 +76,14 @@ const BurgerIngredients = ({ ingredients, openModal }) => {
     [ingredients]
   );
 
+  if (status === 'loading') {
+    return <div>Загрузка...</div>;
+  }
+
+  if (status === 'failed') {
+    return <div>Произошла ошибка: {error}</div>;
+  }
+
   return (
     <section className={styles.ingredients}>
       {/* Tabs */}
@@ -104,7 +122,6 @@ const BurgerIngredients = ({ ingredients, openModal }) => {
 };
 
 BurgerIngredients.propTypes = {
-  ingredients: PropTypes.arrayOf(ingredientPropType).isRequired,
   openModal: PropTypes.func.isRequired,
 };
 
