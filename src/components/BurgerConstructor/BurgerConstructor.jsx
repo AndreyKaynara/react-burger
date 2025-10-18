@@ -1,16 +1,53 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
-import { ConstructorElement, DragIcon, Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { useDrop } from 'react-dnd';
+import { ConstructorElement, Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerConstructor.module.css';
 import scrollbarStyles from '../../styles/scrollbar.module.css';
 import { ingredientPropType } from '../../utils/prop-types';
-import { addIngredient, removeIngredient, clearConstructor } from '../../services/constuctorSlice';
+import { addIngredient, removeIngredient, clearConstructor, reorderIngredients } from '../../services/constuctorSlice';
+import { incrementCounter, decrementCounter, resetCounters } from '../../services/ingredientsSlice';
 import { createOrder } from '../../services/orderSlice';
+import ConstructorIngredient from './ConstructorIngredient/ConstructorIngredient';
 
 const BurgerConstructor = ({ ingredients = [], openModal }) => {
   const { bun, fillings, totalPrice } = useSelector((state) => state.burgerConstructor);
   const dispatch = useDispatch();
+
+  const [{ isOver }, dropRef] = useDrop({
+    accept: ['ingredient', 'constructor-ingredient'],
+    drop: (item, monitor) => {
+      if (monitor.getItemType() === 'constructor-ingredient') {
+        return;
+      }
+      const ingredient = item.ingredient;
+      dispatch(addIngredient(ingredient));
+
+      if (ingredient.type === 'bun') {
+        // Уменьшаем счётчик старой булки и увеличиваем счётчик у новой.
+        if (bun && ingredient._id !== bun._id) {
+          dispatch(decrementCounter(bun._id));
+          dispatch(incrementCounter(ingredient._id));
+        }
+        if (!bun) {
+          dispatch(incrementCounter(ingredient._id));
+        }
+      } else {
+        dispatch(incrementCounter(ingredient._id));
+      }
+    },
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+    }),
+  });
+
+  const moveIngredient = useCallback(
+    (fromIndex, toIndex) => {
+      dispatch(reorderIngredients({ fromIndex, toIndex }));
+    },
+    [dispatch]
+  );
 
   const handleOrderClick = () => {
     if (!bun) {
@@ -25,6 +62,7 @@ const BurgerConstructor = ({ ingredients = [], openModal }) => {
       .unwrap()
       .then(() => {
         dispatch(clearConstructor());
+        dispatch(resetCounters());
         openModal();
       })
       .catch((error) => {
@@ -35,7 +73,10 @@ const BurgerConstructor = ({ ingredients = [], openModal }) => {
 
   return (
     <section className={styles.constructor}>
-      <div className={`mb-10 ${styles.list} ${scrollbarStyles.customScrollbar}`}>
+      <div
+        ref={dropRef}
+        className={`mb-10 ${styles.list} ${scrollbarStyles.customScrollbar} ${isOver ? styles.dragOver : ''}`}
+      >
         {/* Верхняя булка */}
         {bun && (
           <div className={styles.row}>
@@ -53,20 +94,17 @@ const BurgerConstructor = ({ ingredients = [], openModal }) => {
         )}
 
         {/* Начинки */}
-        {fillings.map((item) => (
-          <div key={item.uuid} className={styles.row}>
-            <div className={styles.drag}>
-              <DragIcon type="primary" />
-            </div>
-            <div className={styles.elem}>
-              <ConstructorElement
-                text={item.name}
-                price={item.price}
-                thumbnail={item.image}
-                handleClose={() => dispatch(removeIngredient(item))}
-              />
-            </div>
-          </div>
+        {fillings.map((item, index) => (
+          <ConstructorIngredient
+            key={item.uuid}
+            ingredient={item}
+            index={index}
+            moveIngredient={moveIngredient}
+            onDelete={() => {
+              dispatch(removeIngredient(item));
+              dispatch(decrementCounter(item._id));
+            }}
+          />
         ))}
 
         {/* Нижняя булка */}

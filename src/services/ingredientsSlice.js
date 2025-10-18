@@ -17,8 +17,24 @@ const ingredientsSlice = createSlice({
   name: 'ingredients',
   initialState: {
     data: [],
+    counters: {},
     status: 'idle',
     error: null,
+  },
+  reducers: {
+    incrementCounter: (state, action) => {
+      state.counters[action.payload] = state.counters[action.payload] + 1;
+    },
+    decrementCounter: (state, action) => {
+      const current = state.counters[action.payload];
+      state.counters[action.payload] = current > 0 ? current - 1 : 0;
+    },
+
+    resetCounters: (state) => {
+      state.data.forEach((item) => {
+        state.counters[item._id] = 0;
+      });
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -29,6 +45,10 @@ const ingredientsSlice = createSlice({
       .addCase(fetchIngredients.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.data = action.payload;
+        state.counters = state.data.reduce((acc, item) => {
+          acc[item._id] = 0;
+          return acc;
+        }, {});
       })
       .addCase(fetchIngredients.rejected, (state, action) => {
         state.status = 'failed';
@@ -37,4 +57,5 @@ const ingredientsSlice = createSlice({
   },
 });
 
+export const { incrementCounter, decrementCounter, resetCounters } = ingredientsSlice.actions;
 export default ingredientsSlice.reducer;

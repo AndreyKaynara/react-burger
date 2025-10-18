@@ -12,6 +12,13 @@
   max-height: 660px;
   min-height: 250px;
   overflow-y: scroll;
+  border: 2px dashed transparent;
+  border-radius: 40px;
+  transition: border 0.2s ease;
+}
+
+.list.dragOver {
+  border-color: #4C4CFF;
 }
 
 .row {

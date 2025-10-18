@@ -49,8 +49,13 @@ const constructorSlice = createSlice({
       state.fillings = [];
       state.totalPrice = 0;
     },
+    reorderIngredients: (state, action) => {
+      const { fromIndex, toIndex } = action.payload;
+      const [movedItem] = state.fillings.splice(fromIndex, 1);
+      state.fillings.splice(toIndex, 0, movedItem);
+    },
   },
 });
 
-export const { addIngredient, removeIngredient, clearConstructor } = constructorSlice.actions;
+export const { addIngredient, removeIngredient, clearConstructor, reorderIngredients } = constructorSlice.actions;
 export default constructorSlice.reducer;
