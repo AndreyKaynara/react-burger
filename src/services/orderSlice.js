@@ -1,21 +1,14 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-
-import { API_SERVER_URL } from '../utils/api';
+import request from '../utils/requests';
 
 export const createOrder = createAsyncThunk('constructor/createOrder', async (orderData) => {
-  const response = await fetch(`${API_SERVER_URL}/orders`, {
+  const data = await request('orders', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ ingredients: orderData }),
   });
-
-  if (!response.ok) {
-    throw new Error('Ошибка при формировании заказа');
-  }
-
-  const data = await response.json();
   return data.order;
 });
 
