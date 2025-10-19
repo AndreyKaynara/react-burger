@@ -35,7 +35,7 @@ const BurgerIngredients = ({ openModal }) => {
   // Используем Intersection Observer для автоматического переключения табов.
   useEffect(() => {
     const container = ingredientsRef.current;
-    if (!container) return;
+    if (!container || status !== 'succeeded') return;
 
     // Настройки Observer.
     const options = {
@@ -57,14 +57,18 @@ const BurgerIngredients = ({ openModal }) => {
 
     const observer = new IntersectionObserver(observerCallback, options);
 
-    if (bunRef.current) observer.observe(bunRef.current);
-    if (sauceRef.current) observer.observe(sauceRef.current);
-    if (mainRef.current) observer.observe(mainRef.current);
+    // Добавляем небольшую задержку, чтобы убедиться, что DOM обновился
+    const timer = setTimeout(() => {
+      if (bunRef.current) observer.observe(bunRef.current);
+      if (sauceRef.current) observer.observe(sauceRef.current);
+      if (mainRef.current) observer.observe(mainRef.current);
+    }, 100);
 
     return () => {
+      clearTimeout(timer);
       observer.disconnect();
     };
-  }, []);
+  }, [status]); // Добавляем зависимость от статуса загрузки
 
   // Группируем ингредиенты по типу, чтобы потом передать в отдельную секцию.
   const groupedIngredients = useMemo(
