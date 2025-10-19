@@ -1,17 +1,28 @@
-import React, { useState, useRef, useMemo } from 'react';
+import React, { useState, useRef, useMemo, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerIngredients.module.css';
 import scrollbarStyles from '../../styles/scrollbar.module.css';
 import IngredientSection from './IngredientSection/IngredientSection';
-import { ingredientPropType } from '../../utils/prop-types';
+import { fetchIngredients } from '../../services/ingredientsSlice';
 
-const BurgerIngredients = ({ ingredients, openModal }) => {
+const BurgerIngredients = ({ openModal }) => {
   const [currentTab, setCurrentTab] = useState('bun');
+  const { data: ingredients, status, error } = useSelector((state) => state.ingredients);
 
+  const ingredientsRef = useRef(null);
   const bunRef = useRef(null);
   const sauceRef = useRef(null);
   const mainRef = useRef(null);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (status === 'idle') {
+      dispatch(fetchIngredients());
+    }
+  }, [status, dispatch]);
 
   // Делаем ссылки на разделы списка с ингредиентами.
   const scrollTo = (type) => {
@@ -20,6 +31,44 @@ const BurgerIngredients = ({ ingredients, openModal }) => {
     if (type === 'main' && mainRef.current) mainRef.current.scrollIntoView({ behavior: 'smooth' });
     setCurrentTab(type);
   };
+
+  // Используем Intersection Observer для автоматического переключения табов.
+  useEffect(() => {
+    const container = ingredientsRef.current;
+    if (!container || status !== 'succeeded') return;
+
+    // Настройки Observer.
+    const options = {
+      root: container, // Элемент, с которым сравниваем (базовый контейнер с ингредиентами).
+      rootMargin: '0px 0px -95% 0px', // Задаём триггер у верхней границы контейнера.
+      threshold: 0, // Достаточно минимального пересечения в 1 пиксель.
+    };
+
+    const observerCallback = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const sectionType = entry.target.dataset.type;
+          if (sectionType) {
+            setCurrentTab(sectionType);
+          }
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, options);
+
+    // Добавляем небольшую задержку, чтобы убедиться, что DOM обновился
+    const timer = setTimeout(() => {
+      if (bunRef.current) observer.observe(bunRef.current);
+      if (sauceRef.current) observer.observe(sauceRef.current);
+      if (mainRef.current) observer.observe(mainRef.current);
+    }, 100);
+
+    return () => {
+      clearTimeout(timer);
+      observer.disconnect();
+    };
+  }, [status]); // Добавляем зависимость от статуса загрузки
 
   // Группируем ингредиенты по типу, чтобы потом передать в отдельную секцию.
   const groupedIngredients = useMemo(
@@ -30,6 +79,14 @@ const BurgerIngredients = ({ ingredients, openModal }) => {
     }),
     [ingredients]
   );
+
+  if (status === 'loading') {
+    return <div>Загрузка...</div>;
+  }
+
+  if (status === 'failed') {
+    return <div>Произошла ошибка: {error}</div>;
+  }
 
   return (
     <section className={styles.ingredients}>
@@ -47,17 +104,28 @@ const BurgerIngredients = ({ ingredients, openModal }) => {
       </div>
 
       {/* Список ингредиентов */}
-      <div className={`${styles.ingredientsList} ${scrollbarStyles.customScrollbar}`}>
-        <IngredientSection ref={bunRef} title="Булки" items={groupedIngredients.bun} onClick={openModal} />
-        <IngredientSection ref={sauceRef} title="Соусы" items={groupedIngredients.sauce} onClick={openModal} />
-        <IngredientSection ref={mainRef} title="Начинки" items={groupedIngredients.main} onClick={openModal} />
+      <div ref={ingredientsRef} className={`${styles.ingredientsList} ${scrollbarStyles.customScrollbar}`}>
+        <IngredientSection ref={bunRef} type="bun" title="Булки" items={groupedIngredients.bun} onClick={openModal} />
+        <IngredientSection
+          ref={sauceRef}
+          type="sauce"
+          title="Соусы"
+          items={groupedIngredients.sauce}
+          onClick={openModal}
+        />
+        <IngredientSection
+          ref={mainRef}
+          type="main"
+          title="Начинки"
+          items={groupedIngredients.main}
+          onClick={openModal}
+        />
       </div>
     </section>
   );
 };
 
 BurgerIngredients.propTypes = {
-  ingredients: PropTypes.arrayOf(ingredientPropType).isRequired,
   openModal: PropTypes.func.isRequired,
 };
 

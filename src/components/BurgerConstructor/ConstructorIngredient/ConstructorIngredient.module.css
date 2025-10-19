@@ -1,0 +1,31 @@
+.row {
+  display: flex;
+  align-items: center;
+  cursor: move;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.row.dragging {
+  opacity: 0.4;
+}
+
+.row.over {
+  transform: scale(1.02);
+}
+
+.drag {
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.elem {
+  flex: 1;
+}
+
+.elem > * {
+  width: 100%;
+  box-sizing: border-box;
+  background: #1c1c21;
+}
