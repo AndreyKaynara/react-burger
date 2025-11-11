@@ -1,0 +1,38 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.form {
+  width: 100%;
+  max-width: 480px;
+}
+
+.title {
+  text-align: center;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.link {
+  cursor: pointer;
+  color: #4C4CFF;
+  text-decoration: none;
+}
+
+.link:hover {
+  color: #F2F2F3;
+}
+
+.textCenter {
+  text-align: center;
+}
+
+.errorMessage {
+  text-align: center;
+}

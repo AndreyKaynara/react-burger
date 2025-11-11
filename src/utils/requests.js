@@ -1,18 +1,19 @@
-import { API_SERVER_URL } from './api';
+import { API_SERVER_URL } from './api/api';
 
-function checkResponse(res) {
+async function checkResponse(res) {
+  const data = await res.json().catch(() => ({}));
   if (!res.ok) {
-    throw new Error('Ошибка сервера');
+    const error = new Error(data.message || 'Ошибка сервера');
+    error.status = res.status;
+    throw error;
   }
-  return res.json();
+  return data;
 }
-
 export default function request(endpoint, options) {
   const url = `${API_SERVER_URL}/${endpoint}`;
   return fetch(url, options)
     .then(checkResponse)
     .catch((error) => {
-      console.log('Ошибка запроса:', error);
       throw error;
     });
 }
