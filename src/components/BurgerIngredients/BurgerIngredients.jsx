@@ -1,11 +1,10 @@
 import React, { useState, useRef, useMemo, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerIngredients.module.css';
 import scrollbarStyles from '../../styles/scrollbar.module.css';
 import IngredientSection from './IngredientSection/IngredientSection';
-import { fetchIngredients } from '../../services/ingredientsSlice';
 
 const BurgerIngredients = ({ openModal }) => {
   const [currentTab, setCurrentTab] = useState('bun');
@@ -15,14 +14,6 @@ const BurgerIngredients = ({ openModal }) => {
   const bunRef = useRef(null);
   const sauceRef = useRef(null);
   const mainRef = useRef(null);
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (status === 'idle') {
-      dispatch(fetchIngredients());
-    }
-  }, [status, dispatch]);
 
   // Делаем ссылки на разделы списка с ингредиентами.
   const scrollTo = (type) => {

@@ -4,19 +4,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import IngredientDetails from '../../components/IngredientDetails/IngredientDetails';
 import { setIngredient } from '../../services/ingredientDetailsSlice';
 import styles from './IngredientPage.module.css';
-import { fetchIngredients } from '../../services/ingredientsSlice';
 
 export default function IngredientPage() {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const { data: ingredients, status, error } = useSelector((state) => state.ingredients);
+  const ingredients = useSelector((state) => state.ingredients.data);
   const ingredient = useSelector((state) => state.ingredientDetails.ingredient);
-
-  useEffect(() => {
-    if (status === 'idle') {
-      dispatch(fetchIngredients());
-    }
-  }, [status, dispatch]);
 
   useEffect(() => {
     // Находим ингредиент по id из URL и кладём в стор

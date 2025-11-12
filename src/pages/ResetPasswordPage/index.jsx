@@ -1,13 +1,12 @@
 import { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, NavLink } from 'react-router-dom';
 import styles from '../../styles/forms.module.css';
 import { Button, PasswordInput, Input } from '@ya.praktikum/react-developer-burger-ui-components';
-import { NavLink } from 'react-router-dom';
 import { API_SERVER_URL } from '../../utils/api/api';
+import { useForm } from '../../hooks/useForm';
 
 export default function ResetPasswordPage() {
-  const [password, setPassword] = useState('');
-  const [code, setCode] = useState('');
+  const { values, handleChange } = useForm({ password: '', code: '' });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -23,19 +22,16 @@ export default function ResetPasswordPage() {
     try {
       const response = await fetch(`${API_SERVER_URL}/password-reset/reset`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          password,
-          token: code,
+          password: values.password,
+          token: values.code,
         }),
       });
 
       const data = await response.json();
 
       if (response.ok && data.success) {
-        // После успешного сброса пароля переходим на страницу входа
         navigate('/login', { replace: true });
       } else {
         setError(data.message || 'Ошибка при сбросе пароля');
@@ -57,10 +53,10 @@ export default function ResetPasswordPage() {
         <form onSubmit={handleSubmit}>
           <div className="mb-6">
             <PasswordInput
-              onChange={(e) => setPassword(e.target.value)}
-              value={password}
               name="password"
               placeholder="Введите новый пароль"
+              value={values.password}
+              onChange={handleChange}
               disabled={isLoading}
             />
           </div>
@@ -68,16 +64,21 @@ export default function ResetPasswordPage() {
           <div className="mb-6">
             <Input
               type="text"
-              placeholder="Введите код из письма"
-              onChange={(e) => setCode(e.target.value)}
-              value={code}
               name="code"
+              placeholder="Введите код из письма"
+              value={values.code}
+              onChange={handleChange}
               disabled={isLoading}
             />
           </div>
 
           <div className={`mb-20 ${styles.buttonContainer}`}>
-            <Button htmlType="submit" type="primary" size="medium" disabled={isLoading || !password || !code}>
+            <Button
+              htmlType="submit"
+              type="primary"
+              size="medium"
+              disabled={isLoading || !values.password || !values.code}
+            >
               {isLoading ? 'Сохранение...' : 'Сохранить'}
             </Button>
           </div>

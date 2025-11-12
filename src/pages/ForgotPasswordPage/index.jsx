@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, NavLink } from 'react-router-dom';
 import styles from '../../styles/forms.module.css';
 import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import { NavLink } from 'react-router-dom';
 import { API_SERVER_URL } from '../../utils/api/api';
+import { useForm } from '../../hooks/useForm';
 
 export default function ForgotPasswordPage() {
-  const [email, setEmail] = useState('');
+  const { values, handleChange } = useForm({ email: '' });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -19,21 +19,15 @@ export default function ForgotPasswordPage() {
     try {
       const response = await fetch(`${API_SERVER_URL}/password-reset`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: values.email }),
       });
 
       const data = await response.json();
 
       if (response.ok && data.success) {
-        // Переходим на страницу reset-password, передавая email и флаг
         navigate('/reset-password', {
-          state: {
-            fromForgotPassword: true,
-            email: email,
-          },
+          state: { fromForgotPassword: true, email: values.email },
           replace: true,
         });
       } else {
@@ -56,16 +50,16 @@ export default function ForgotPasswordPage() {
         <form onSubmit={handleSubmit}>
           <div className="mb-6">
             <EmailInput
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
               name="email"
               placeholder="Укажите e-mail"
+              value={values.email}
+              onChange={handleChange}
               disabled={isLoading}
             />
           </div>
 
           <div className={`mb-20 ${styles.buttonContainer}`}>
-            <Button htmlType="submit" type="primary" size="medium" disabled={isLoading || !email}>
+            <Button htmlType="submit" type="primary" size="medium" disabled={isLoading || !values.email}>
               {isLoading ? 'Отправка...' : 'Восстановить'}
             </Button>
           </div>

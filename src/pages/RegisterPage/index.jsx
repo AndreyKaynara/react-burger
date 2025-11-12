@@ -1,15 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, NavLink } from 'react-router-dom';
 import styles from '../../styles/forms.module.css';
 import { Button, EmailInput, PasswordInput, Input } from '@ya.praktikum/react-developer-burger-ui-components';
-import { NavLink } from 'react-router-dom';
 import { register, clearError } from '../../services/authSlice';
+import { useForm } from '../../hooks/useForm';
 
 export default function RegisterPage() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const { values, handleChange } = useForm({ name: '', email: '', password: '' });
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -29,8 +27,10 @@ export default function RegisterPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(register({ email, password, name }));
+    dispatch(register(values));
   };
+
+  const isDisabled = !values.name || !values.email || !values.password || isLoading;
 
   return (
     <div className={styles.container}>
@@ -40,30 +40,19 @@ export default function RegisterPage() {
         {error && <p className={`text text_type_main-default text_color_error mb-4 ${styles.errorMessage}`}>{error}</p>}
 
         <div className="mb-6">
-          <Input type="text" placeholder="Имя" onChange={(e) => setName(e.target.value)} value={name} name="name" />
+          <Input type="text" placeholder="Имя" name="name" value={values.name} onChange={handleChange} />
         </div>
 
         <div className="mb-6">
-          <EmailInput onChange={(e) => setEmail(e.target.value)} value={email} name="email" placeholder="E-mail" />
+          <EmailInput placeholder="E-mail" name="email" value={values.email} onChange={handleChange} />
         </div>
 
         <div className="mb-6">
-          <PasswordInput
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-            name="password"
-            placeholder="Пароль"
-          />
+          <PasswordInput placeholder="Пароль" name="password" value={values.password} onChange={handleChange} />
         </div>
 
         <div className={`mb-20 ${styles.buttonContainer}`}>
-          <Button
-            htmlType="submit"
-            type="primary"
-            size="medium"
-            onClick={handleSubmit}
-            disabled={isLoading || !name || !email || !password}
-          >
+          <Button htmlType="submit" type="primary" size="medium" onClick={handleSubmit} disabled={isDisabled}>
             {isLoading ? 'Загрузка...' : 'Зарегистрироваться'}
           </Button>
         </div>

@@ -5,10 +5,10 @@ import styles from '../../styles/forms.module.css';
 import { Button, EmailInput, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { NavLink } from 'react-router-dom';
 import { login } from '../../services/authSlice';
+import { useForm } from '../../hooks/useForm';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const { values, handleChange, setValues } = useForm({ email: '', password: '' });
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ export default function LoginPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(login({ email, password }));
+    dispatch(login({ email: values.email, password: values.password }));
   };
 
   return (
@@ -39,8 +39,8 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit}>
           <div className="mb-6">
             <EmailInput
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
+              onChange={handleChange}
+              value={values.email}
               name="email"
               placeholder="E-mail"
               disabled={isLoading}
@@ -49,8 +49,8 @@ export default function LoginPage() {
 
           <div className="mb-6">
             <PasswordInput
-              onChange={(e) => setPassword(e.target.value)}
-              value={password}
+              onChange={handleChange}
+              value={values.password}
               name="password"
               placeholder="Пароль"
               disabled={isLoading}
@@ -58,7 +58,12 @@ export default function LoginPage() {
           </div>
 
           <div className={`mb-20 ${styles.buttonContainer}`}>
-            <Button htmlType="submit" type="primary" size="medium" disabled={isLoading || !email || !password}>
+            <Button
+              htmlType="submit"
+              type="primary"
+              size="medium"
+              disabled={isLoading || !values.email || !values.password}
+            >
               {isLoading ? 'Загрузка...' : 'Войти'}
             </Button>
           </div>

@@ -1,71 +1,65 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Input, EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { logout, updateUser } from '../../services/authSlice';
 import styles from './ProfilePage.module.css';
+import { useForm } from '../../hooks/useForm';
 
 export default function ProfilePage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user, isLoading, error } = useSelector((state) => state.auth);
 
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const { values, handleChange, setValues } = useForm({ name: '', email: '', password: '' });
   const [isChanged, setIsChanged] = useState(false);
 
+  // Инициализация значений формы при загрузке user
   useEffect(() => {
     if (user) {
-      setName(user.name || '');
-      setEmail(user.email || '');
-      setPassword('');
+      setValues({
+        name: user.name || '',
+        email: user.email || '',
+        password: '',
+      });
     }
-  }, [user]);
+  }, [user, setValues]);
 
+  // Проверка, изменились ли данные
   useEffect(() => {
     if (user) {
-      const nameChanged = name !== user.name;
-      const emailChanged = email !== user.email;
-      const passwordChanged = password !== '';
-
+      const nameChanged = values.name !== user.name;
+      const emailChanged = values.email !== user.email;
+      const passwordChanged = values.password !== '';
       setIsChanged(nameChanged || emailChanged || passwordChanged);
     }
-  }, [name, email, password, user]);
+  }, [values, user]);
 
   const handleLogout = () => {
-    dispatch(logout()).then(() => {
-      navigate('/login');
-    });
+    dispatch(logout()).then(() => navigate('/login'));
   };
 
   const handleCancel = () => {
     if (user) {
-      setName(user.name || '');
-      setEmail(user.email || '');
-      setPassword('');
+      setValues({
+        name: user.name || '',
+        email: user.email || '',
+        password: '',
+      });
     }
-    dispatch();
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const userData = {};
-
-    if (name !== user.name) {
-      userData.name = name;
-    }
-    if (email !== user.email) {
-      userData.email = email;
-    }
-    if (password) {
-      userData.password = password;
-    }
+    if (values.name !== user.name) userData.name = values.name;
+    if (values.email !== user.email) userData.email = values.email;
+    if (values.password) userData.password = values.password;
 
     dispatch(updateUser(userData)).then((result) => {
       if (result.type === 'auth/updateUser/fulfilled') {
-        setPassword('');
+        setValues((prev) => ({ ...prev, password: '' }));
       }
     });
   };
@@ -84,7 +78,6 @@ export default function ProfilePage() {
             >
               Профиль
             </NavLink>
-
             <NavLink
               to="/profile/orders"
               className={({ isActive }) =>
@@ -93,7 +86,6 @@ export default function ProfilePage() {
             >
               История заказов
             </NavLink>
-
             <button
               onClick={handleLogout}
               className={`${styles.logoutButton} text text_type_main-medium text_color_inactive`}
@@ -116,9 +108,9 @@ export default function ProfilePage() {
               <Input
                 type="text"
                 placeholder="Имя"
-                onChange={(e) => setName(e.target.value)}
-                value={name}
                 name="name"
+                value={values.name}
+                onChange={handleChange}
                 icon="EditIcon"
                 disabled={isLoading}
               />
@@ -126,10 +118,10 @@ export default function ProfilePage() {
 
             <div className="mb-6">
               <EmailInput
-                onChange={(e) => setEmail(e.target.value)}
-                value={email}
-                name="email"
                 placeholder="Логин"
+                name="email"
+                value={values.email}
+                onChange={handleChange}
                 isIcon={true}
                 disabled={isLoading}
               />
@@ -137,11 +129,11 @@ export default function ProfilePage() {
 
             <div className="mb-6">
               <PasswordInput
-                onChange={(e) => setPassword(e.target.value)}
-                value={password}
-                name="password"
-                icon="EditIcon"
                 placeholder="Пароль"
+                name="password"
+                value={values.password}
+                onChange={handleChange}
+                icon="EditIcon"
                 disabled={isLoading}
               />
             </div>
