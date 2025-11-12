@@ -1,5 +1,6 @@
 import { useSelector } from 'react-redux';
 import { Navigate, useLocation } from 'react-router-dom';
+import styles from '../../App.module.css';
 
 export default function ProtectedRouteElement({ onlyUnAuth = false, children }) {
   const { isAuthenticated, isLoading } = useSelector((state) => state.auth);
@@ -8,14 +9,7 @@ export default function ProtectedRouteElement({ onlyUnAuth = false, children }) 
   // Показываем загрузку пока проверяем авторизацию
   if (isLoading) {
     return (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          minHeight: '100vh',
-        }}
-      >
+      <div style={styles.loading}>
         <p className="text text_type_main-medium">Загрузка...</p>
       </div>
     );

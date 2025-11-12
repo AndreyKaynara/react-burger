@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
@@ -18,8 +18,8 @@ import ResetPasswordPage from './pages/ResetPasswordPage';
 import OrderHistory from './pages/OrderHistory';
 
 import { checkAuth } from './services/authSlice';
-
 import { useNavigate, useParams } from 'react-router-dom';
+import { fetchIngredients } from './services/ingredientsSlice';
 import { setIngredient, clearIngredient } from './services/ingredientDetailsSlice';
 import IngredientDetailsModal from './components/IngredientDetails/IngredientDetailsModal';
 
@@ -131,7 +131,14 @@ function IngredientDetailsModalRoute() {
 
 function App() {
   const dispatch: any = useDispatch();
+  const status: any = useSelector((state: any) => state.ingredients.status);
   const { isLoading } = useSelector((state: any) => state.auth);
+
+  useEffect(() => {
+    if (status === 'idle') {
+      dispatch(fetchIngredients());
+    }
+  }, [status, dispatch]);
 
   useEffect(() => {
     dispatch(checkAuth());
@@ -139,14 +146,7 @@ function App() {
 
   if (isLoading) {
     return (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          minHeight: '100vh',
-        }}
-      >
+      <div className={styles.loading}>
         <p className="text text_type_main-medium">Загрузка...</p>
       </div>
     );

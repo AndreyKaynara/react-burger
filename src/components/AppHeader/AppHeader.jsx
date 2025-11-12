@@ -32,7 +32,9 @@ const AppHeader = () => {
         </div>
 
         <div className={styles.center}>
-          <Logo />
+          <a href="/">
+            <Logo />
+          </a>
         </div>
 
         <div className={styles.right}>

@@ -2,11 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { createOrderApi } from '../utils/api/ordersApi';
 
 export const createOrder = createAsyncThunk('constructor/createOrder', async (orderData, { rejectWithValue }) => {
-  try {
-    return await createOrderApi(orderData);
-  } catch (error) {
-    return rejectWithValue(error); // можно добавить функцию handleApiError
-  }
+  return await createOrderApi(orderData);
 });
 
 const orderSlice = createSlice({
