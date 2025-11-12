@@ -1,0 +1,9 @@
+.main {
+  display: flex;
+  gap: 40px;
+}
+
+.column {
+  flex: 1;
+  min-width: 0;
+}

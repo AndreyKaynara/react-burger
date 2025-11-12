@@ -1,0 +1,34 @@
+import { useSelector } from 'react-redux';
+import { Navigate, useLocation } from 'react-router-dom';
+import styles from '../../App.module.css';
+
+export default function ProtectedRouteElement({ onlyUnAuth = false, children }) {
+  const { isAuthenticated, isLoading } = useSelector((state) => state.auth);
+  const location = useLocation();
+
+  // Показываем загрузку пока проверяем авторизацию
+  if (isLoading) {
+    return (
+      <div style={styles.loading}>
+        <p className="text text_type_main-medium">Загрузка...</p>
+      </div>
+    );
+  }
+
+  // Если маршрут только для неавторизованных (login, register и т.д.)
+  if (onlyUnAuth && isAuthenticated) {
+    // Если пользователь авторизован, перенаправляем на главную
+    // Или на страницу, с которой он пришёл (если она была сохранена)
+    const from = location.state?.from?.pathname || '/';
+    return <Navigate to={from} replace />;
+  }
+
+  // Если маршрут защищён и пользователь не авторизован
+  if (!onlyUnAuth && !isAuthenticated) {
+    // Сохраняем текущий маршрут, чтобы вернуться после авторизации
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  // Если всё в порядке, показываем контент
+  return children;
+}

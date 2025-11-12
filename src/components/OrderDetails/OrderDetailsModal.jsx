@@ -5,7 +5,7 @@ import OrderDetails from './OrderDetails';
 
 const OrderDetailsModal = ({ onClose }) => {
   return (
-    <Modal title="Детали заказа" onClose={onClose}>
+    <Modal title="" onClose={onClose}>
       <OrderDetails />
     </Modal>
   );

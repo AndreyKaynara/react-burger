@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { useDrop } from 'react-dnd';
 import { ConstructorElement, Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerConstructor.module.css';
@@ -12,7 +13,9 @@ import ConstructorIngredient from './ConstructorIngredient/ConstructorIngredient
 
 const BurgerConstructor = ({ openModal }) => {
   const { bun, fillings, totalPrice } = useSelector((state) => state.burgerConstructor);
+  const { isAuthenticated } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [{ isOver }, dropRef] = useDrop({
     accept: ['ingredient', 'constructor-ingredient'],
@@ -49,6 +52,12 @@ const BurgerConstructor = ({ openModal }) => {
   );
 
   const handleOrderClick = () => {
+    // Проверяем авторизацию
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+
     if (!bun) {
       alert('Необходимо выбрать булку');
       return;

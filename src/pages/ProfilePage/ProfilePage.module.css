@@ -1,0 +1,39 @@
+.container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.wrapper {
+  display: flex;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding-top: 80px;
+}
+
+.sidebar {
+  width: 320px;
+}
+
+.navLink {
+  display: block;
+  text-decoration: none;
+}
+
+.logoutButton {
+  display: block;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+}
+
+.content {
+  flex: 1;
+}
+
+.formContainer {
+  max-width: 480px;
+}
