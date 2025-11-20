@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate, NavLink } from 'react-router-dom';
 import styles from '../../styles/forms.module.css';
 import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import { API_SERVER_URL } from '../../utils/api/api';
+import { API_SERVER_URL } from '../../api/api';
 import { useForm } from '../../hooks/useForm';
 
 export default function ForgotPasswordPage() {

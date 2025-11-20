@@ -1,15 +1,16 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Input, EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { logout, updateUser } from '../../services/authSlice';
 import styles from './ProfilePage.module.css';
 import { useForm } from '../../hooks/useForm';
+import { AuthState, UserRegisterData } from '../../types';
 
 export default function ProfilePage() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<any>();
   const navigate = useNavigate();
-  const { user, isLoading, error } = useSelector((state) => state.auth);
+  const { user, isLoading, error } = useSelector((state: any) => state.auth) as AuthState;
 
   const { values, handleChange, setValues } = useForm({ name: '', email: '', password: '' });
   const [isChanged, setIsChanged] = useState(false);
@@ -36,7 +37,7 @@ export default function ProfilePage() {
   }, [values, user]);
 
   const handleLogout = () => {
-    dispatch(logout()).then(() => navigate('/login'));
+    dispatch(logout() as any).then(() => navigate('/login'));
   };
 
   const handleCancel = () => {
@@ -49,15 +50,18 @@ export default function ProfilePage() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const userData = {};
+    if (!user) return;
+
+    const userData: Partial<UserRegisterData> = {};
+
     if (values.name !== user.name) userData.name = values.name;
     if (values.email !== user.email) userData.email = values.email;
     if (values.password) userData.password = values.password;
 
-    dispatch(updateUser(userData)).then((result) => {
+    dispatch(updateUser(userData as any)).then((result: any) => {
       if (result.type === 'auth/updateUser/fulfilled') {
         setValues((prev) => ({ ...prev, password: '' }));
       }
@@ -106,13 +110,15 @@ export default function ProfilePage() {
 
             <div className="mb-6">
               <Input
-                type="text"
-                placeholder="Имя"
-                name="name"
-                value={values.name}
-                onChange={handleChange}
-                icon="EditIcon"
-                disabled={isLoading}
+                {...({
+                  type: 'text',
+                  placeholder: 'Имя',
+                  name: 'name',
+                  value: values.name,
+                  onChange: handleChange,
+                  icon: 'EditIcon',
+                  disabled: isLoading,
+                } as any)}
               />
             </div>
 

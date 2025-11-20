@@ -1,20 +1,20 @@
-import { useState } from 'react';
-import { useNavigate, useLocation, NavLink } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate, NavLink } from 'react-router-dom';
 import styles from '../../styles/forms.module.css';
 import { Button, PasswordInput, Input } from '@ya.praktikum/react-developer-burger-ui-components';
-import { API_SERVER_URL } from '../../utils/api/api';
+import { API_SERVER_URL } from '../../api/api';
 import { useForm } from '../../hooks/useForm';
 
-export default function ResetPasswordPage() {
-  const { values, handleChange } = useForm({ password: '', code: '' });
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+export default function ResetPasswordPage(): JSX.Element {
+  const { values, handleChange } = useForm({ password: '', code: '' }) as {
+    values: { password: string; code: string };
+    handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  };
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
   const navigate = useNavigate();
-  const location = useLocation();
 
-  const email = location.state?.email;
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
     setIsLoading(true);
@@ -23,18 +23,15 @@ export default function ResetPasswordPage() {
       const response = await fetch(`${API_SERVER_URL}/password-reset/reset`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          password: values.password,
-          token: values.code,
-        }),
+        body: JSON.stringify({ password: values.password, token: values.code }),
       });
 
       const data = await response.json();
 
-      if (response.ok && data.success) {
+      if (response.ok && (data as any).success) {
         navigate('/login', { replace: true });
       } else {
-        setError(data.message || 'Ошибка при сбросе пароля');
+        setError((data as any).message || 'Ошибка при сбросе пароля');
       }
     } catch (err) {
       setError('Произошла ошибка. Попробуйте позже.');
@@ -63,12 +60,14 @@ export default function ResetPasswordPage() {
 
           <div className="mb-6">
             <Input
-              type="text"
-              name="code"
-              placeholder="Введите код из письма"
-              value={values.code}
-              onChange={handleChange}
-              disabled={isLoading}
+              {...({
+                type: 'text',
+                name: 'code',
+                placeholder: 'Введите код из письма',
+                value: values.code,
+                onChange: handleChange,
+                disabled: isLoading,
+              } as React.ComponentProps<typeof Input>)}
             />
           </div>
 

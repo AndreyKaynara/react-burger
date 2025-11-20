@@ -1,6 +1,11 @@
+import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 
-export default function ResetPasswordProtection({ children }) {
+interface ResetPasswordProtectionProps {
+  children: React.ReactNode;
+}
+
+const ResetPasswordProtection: React.FC<ResetPasswordProtectionProps> = ({ children }) => {
   const location = useLocation();
 
   // Проверяем, пришёл ли пользователь со страницы forgot-password
@@ -13,5 +18,7 @@ export default function ResetPasswordProtection({ children }) {
     return <Navigate to="/forgot-password" replace />;
   }
 
-  return children;
-}
+  return <>{children}</>;
+};
+
+export default ResetPasswordProtection;

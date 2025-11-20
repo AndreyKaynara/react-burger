@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { createOrderApi } from '../utils/api/ordersApi';
+import { createOrderApi } from '../api/ordersApi';
 
 export const createOrder = createAsyncThunk('constructor/createOrder', async (orderData, { rejectWithValue }) => {
   return await createOrderApi(orderData);

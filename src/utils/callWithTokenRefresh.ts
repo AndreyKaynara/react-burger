@@ -1,11 +1,20 @@
 import { getCookie, setCookie, deleteCookie } from './cookies';
-import { refreshTokenApi } from './api/authApi';
+import { refreshTokenApi } from '../api/authApi';
 
-const isTokenError = (error) =>
-  // API отвечает именно 403, не 401. Но при обновлении токена уже 401.
-  error.status === 403 && /jwt|expired|invalid/i.test(error.message);
+interface TokenError extends Error {
+  status: number;
+}
 
-export const callWithTokenRefresh = async (apiCall) => {
+const isTokenError = (error: unknown): error is TokenError => {
+  if (error instanceof Error && 'status' in error) {
+    const tokenError = error as TokenError;
+    // API отвечает именно 403, не 401. Но при обновлении токена уже 401.
+    return tokenError.status === 403 && /jwt|expired|invalid/i.test(tokenError.message);
+  }
+  return false;
+};
+
+export const callWithTokenRefresh = async <T>(apiCall: (token: string) => Promise<T>): Promise<T> => {
   const accessToken = getCookie('accessToken');
   const refreshTokenValue = getCookie('refreshToken');
 
@@ -26,6 +35,9 @@ export const callWithTokenRefresh = async (apiCall) => {
     try {
       const newTokenData = await refreshTokenApi(refreshTokenValue);
 
+      if (!newTokenData.success) {
+        throw new Error(newTokenData.message || 'Не удалось обновить токен');
+      }
       setCookie('accessToken', newTokenData.accessToken);
       setCookie('refreshToken', newTokenData.refreshToken);
 

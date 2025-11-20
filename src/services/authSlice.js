@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { registerApi, loginApi, logoutApi, getUserDataApi, updateUserApi } from '../utils/api/authApi';
+import { registerApi, loginApi, logoutApi, getUserDataApi, updateUserApi } from '../api/authApi';
 import { setCookie, getCookie, deleteCookie } from '../utils/cookies';
 import { callWithTokenRefresh } from '../utils/callWithTokenRefresh';
 
@@ -24,7 +24,7 @@ const handleApiError = (error) => {
 // Async thunks
 export const register = createAsyncThunk('auth/register', async ({ email, password, name }, { rejectWithValue }) => {
   try {
-    const data = await registerApi(email, password, name);
+    const data = await registerApi({ email, password, name });
 
     setCookie('accessToken', data.accessToken);
     setCookie('refreshToken', data.refreshToken);

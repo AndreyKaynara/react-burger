@@ -4,12 +4,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import IngredientDetails from '../../components/IngredientDetails/IngredientDetails';
 import { setIngredient } from '../../services/ingredientDetailsSlice';
 import styles from './IngredientPage.module.css';
+import { Ingredient } from '../../types';
 
 export default function IngredientPage() {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const ingredients = useSelector((state) => state.ingredients.data);
-  const ingredient = useSelector((state) => state.ingredientDetails.ingredient);
+  const ingredients = useSelector((state: any) => state.ingredients.data as Ingredient[]);
+  const ingredient = useSelector((state: any) => state.ingredientDetails.ingredient as Ingredient);
 
   useEffect(() => {
     // Находим ингредиент по id из URL и кладём в стор
