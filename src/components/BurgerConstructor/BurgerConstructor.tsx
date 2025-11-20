@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useDrop } from 'react-dnd';
@@ -10,14 +9,31 @@ import { addIngredient, removeIngredient, clearConstructor, reorderIngredients }
 import { incrementCounter, decrementCounter, resetCounters } from '../../services/ingredientsSlice';
 import { createOrder } from '../../services/orderSlice';
 import ConstructorIngredient from './ConstructorIngredient/ConstructorIngredient';
+import { Ingredient, BurgerConstructorState } from '../../types';
 
-const BurgerConstructor = ({ openModal }) => {
-  const { bun, fillings, totalPrice } = useSelector((state) => state.burgerConstructor);
-  const { isAuthenticated } = useSelector((state) => state.auth);
+interface BurgerConstructorProps {
+  openModal: () => void;
+}
+
+interface AuthState {
+  isAuthenticated: boolean;
+}
+
+interface DragItem {
+  ingredient: Ingredient;
+}
+
+interface DropCollectedProps {
+  isOver: boolean;
+}
+
+const BurgerConstructor: React.FC<BurgerConstructorProps> = ({ openModal }) => {
+  const { bun, fillings, totalPrice } = useSelector((state: any) => state.burgerConstructor) as BurgerConstructorState;
+  const { isAuthenticated } = useSelector((state: any) => state.auth) as AuthState;
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [{ isOver }, dropRef] = useDrop({
+  const [{ isOver }, dropRef] = useDrop<DragItem, void, DropCollectedProps>({
     accept: ['ingredient', 'constructor-ingredient'],
     drop: (item, monitor) => {
       if (monitor.getItemType() === 'constructor-ingredient') {
@@ -45,7 +61,7 @@ const BurgerConstructor = ({ openModal }) => {
   });
 
   const moveIngredient = useCallback(
-    (fromIndex, toIndex) => {
+    (fromIndex: number, toIndex: number) => {
       dispatch(reorderIngredients({ fromIndex, toIndex }));
     },
     [dispatch]
@@ -64,23 +80,23 @@ const BurgerConstructor = ({ openModal }) => {
     }
 
     // Указываем булочку дважды, так как есть верхняя и нижняя.
-    const ingredientIds = [bun._id, ...fillings.map((item) => item._id), bun._id];
+    const ingredientIds: string[] = [bun._id, ...fillings.map((item) => item._id), bun._id];
 
-    dispatch(createOrder(ingredientIds))
+    dispatch(createOrder(ingredientIds as any) as any)
       .unwrap()
       .then(() => {
-        dispatch(clearConstructor());
+        dispatch(clearConstructor(undefined));
         dispatch(resetCounters());
         openModal();
       })
-      .catch((error) => {
+      .catch((error: unknown) => {
         console.log('Ошибка заказа: ', error);
         alert('Ошибка заказа');
       });
   };
 
   return (
-    <section className={styles.constructor}>
+    <section className={styles.burgerConstructor}>
       <div
         ref={dropRef}
         className={`mb-10 ${styles.list} ${scrollbarStyles.customScrollbar} ${isOver ? styles.dragOver : ''}`}
@@ -144,10 +160,6 @@ const BurgerConstructor = ({ openModal }) => {
       </div>
     </section>
   );
-};
-
-BurgerConstructor.propTypes = {
-  openModal: PropTypes.func.isRequired,
 };
 
 export default BurgerConstructor;

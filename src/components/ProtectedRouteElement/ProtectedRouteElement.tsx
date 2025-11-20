@@ -1,15 +1,22 @@
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate, useLocation } from 'react-router-dom';
 import styles from '../../App.module.css';
+import { AuthState } from '../../types';
 
-export default function ProtectedRouteElement({ onlyUnAuth = false, children }) {
-  const { isAuthenticated, isLoading } = useSelector((state) => state.auth);
+interface ProtectedRouteElementProps {
+  onlyUnAuth?: boolean;
+  children: React.ReactNode;
+}
+
+const ProtectedRouteElement: React.FC<ProtectedRouteElementProps> = ({ onlyUnAuth = false, children }) => {
+  const { isAuthenticated, isLoading } = useSelector((state: any) => state.auth as AuthState);
   const location = useLocation();
 
   // Показываем загрузку пока проверяем авторизацию
   if (isLoading) {
     return (
-      <div style={styles.loading}>
+      <div className={styles.loading}>
         <p className="text text_type_main-medium">Загрузка...</p>
       </div>
     );
@@ -30,5 +37,7 @@ export default function ProtectedRouteElement({ onlyUnAuth = false, children }) 
   }
 
   // Если всё в порядке, показываем контент
-  return children;
-}
+  return <>{children}</>;
+};
+
+export default ProtectedRouteElement;

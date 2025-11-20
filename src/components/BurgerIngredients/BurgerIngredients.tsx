@@ -1,22 +1,33 @@
 import React, { useState, useRef, useMemo, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerIngredients.module.css';
 import scrollbarStyles from '../../styles/scrollbar.module.css';
 import IngredientSection from './IngredientSection/IngredientSection';
+import { IngredientsState } from '../../types';
 
-const BurgerIngredients = ({ openModal }) => {
-  const [currentTab, setCurrentTab] = useState('bun');
-  const { data: ingredients, status, error } = useSelector((state) => state.ingredients);
+interface BurgerIngredientsProps {
+  openModal: (any: any) => void;
+}
 
-  const ingredientsRef = useRef(null);
-  const bunRef = useRef(null);
-  const sauceRef = useRef(null);
-  const mainRef = useRef(null);
+const INGREDIENT_TYPES = ['bun', 'sauce', 'main'] as const;
+type IngredientType = (typeof INGREDIENT_TYPES)[number];
+
+function isIngredientType(value: string): value is IngredientType {
+  return INGREDIENT_TYPES.includes(value as IngredientType);
+}
+
+const BurgerIngredients: React.FC<BurgerIngredientsProps> = ({ openModal }) => {
+  const [currentTab, setCurrentTab] = useState<IngredientType>('bun');
+  const { data: ingredients, status, error } = useSelector((state: any) => state.ingredients as IngredientsState);
+
+  const ingredientsRef = useRef<HTMLDivElement>(null);
+  const bunRef = useRef<HTMLDivElement>(null);
+  const sauceRef = useRef<HTMLDivElement>(null);
+  const mainRef = useRef<HTMLDivElement>(null);
 
   // Делаем ссылки на разделы списка с ингредиентами.
-  const scrollTo = (type) => {
+  const scrollTo = (type: IngredientType) => {
     if (type === 'bun' && bunRef.current) bunRef.current.scrollIntoView({ behavior: 'smooth' });
     if (type === 'sauce' && sauceRef.current) sauceRef.current.scrollIntoView({ behavior: 'smooth' });
     if (type === 'main' && mainRef.current) mainRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -35,12 +46,14 @@ const BurgerIngredients = ({ openModal }) => {
       threshold: 0, // Достаточно минимального пересечения в 1 пиксель.
     };
 
-    const observerCallback = (entries) => {
+    const observerCallback: IntersectionObserverCallback = (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          const sectionType = entry.target.dataset.type;
+          const sectionType = entry.target instanceof HTMLElement ? entry.target.dataset.type : undefined;
           if (sectionType) {
-            setCurrentTab(sectionType);
+            if (isIngredientType(sectionType)) {
+              setCurrentTab(sectionType);
+            }
           }
         }
       });
@@ -114,10 +127,6 @@ const BurgerIngredients = ({ openModal }) => {
       </div>
     </section>
   );
-};
-
-BurgerIngredients.propTypes = {
-  openModal: PropTypes.func.isRequired,
 };
 
 export default BurgerIngredients;

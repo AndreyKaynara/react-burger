@@ -1,11 +1,30 @@
 import React, { useRef } from 'react';
-import PropTypes from 'prop-types';
 import { useDrag, useDrop } from 'react-dnd';
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './ConstructorIngredient.module.css';
-import { ingredientPropType } from '../../../utils/prop-types';
+import { IngredientInConstructor } from '../../../types';
 
-const ConstructorIngredient = ({ ingredient, index, moveIngredient, onDelete }) => {
+interface ConstructorIngredientProps {
+  ingredient: IngredientInConstructor;
+  index: number;
+  moveIngredient: (fromIndex: number, toIndex: number) => void;
+  onDelete: () => void;
+}
+
+interface DragItem {
+  index: number;
+}
+
+interface DropCollectedProps {
+  isOver: boolean;
+}
+
+const ConstructorIngredient: React.FC<ConstructorIngredientProps> = ({
+  ingredient,
+  index,
+  moveIngredient,
+  onDelete,
+}) => {
   const ref = useRef(null);
 
   const [{ isDragging }, dragRef] = useDrag({
@@ -16,9 +35,10 @@ const ConstructorIngredient = ({ ingredient, index, moveIngredient, onDelete }) 
     }),
   });
 
-  const [{ isOver }, dropRef] = useDrop({
+  const [{ isOver }, dropRef] = useDrop<DragItem, void, DropCollectedProps>({
     accept: 'constructor-ingredient',
     hover: (draggedItem) => {
+      console.log(draggedItem);
       if (!ref.current) {
         return;
       }
@@ -58,13 +78,6 @@ const ConstructorIngredient = ({ ingredient, index, moveIngredient, onDelete }) 
       </div>
     </div>
   );
-};
-
-ConstructorIngredient.propTypes = {
-  ingredient: ingredientPropType.isRequired,
-  index: PropTypes.number.isRequired,
-  moveIngredient: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired,
 };
 
 export default ConstructorIngredient;

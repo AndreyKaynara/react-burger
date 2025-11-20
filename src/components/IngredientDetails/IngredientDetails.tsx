@@ -1,9 +1,10 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import styles from './IngredientDetails.module.css';
+import { Ingredient } from '../../types';
 
 const IngredientDetails = () => {
-  const ingredient = useSelector((state) => state.ingredientDetails.ingredient);
+  const ingredient = useSelector((state: any) => state.ingredientDetails.ingredient as Ingredient);
 
   return (
     <div className={styles.content}>

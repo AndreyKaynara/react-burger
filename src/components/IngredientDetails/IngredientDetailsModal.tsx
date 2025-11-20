@@ -1,18 +1,17 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Modal from '../Modal/Modal';
 import IngredientDetails from './IngredientDetails';
 
-const IngredientDetailsModal = ({ onClose }) => {
+interface IngredientDetailsModalProps {
+  onClose: () => void;
+}
+
+const IngredientDetailsModal: React.FC<IngredientDetailsModalProps> = ({ onClose }) => {
   return (
     <Modal title="Детали ингредиента" onClose={onClose}>
       <IngredientDetails />
     </Modal>
   );
-};
-
-IngredientDetailsModal.propTypes = {
-  onClose: PropTypes.func.isRequired,
 };
 
 export default IngredientDetailsModal;

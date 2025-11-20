@@ -1,18 +1,17 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Modal from '../Modal/Modal';
 import OrderDetails from './OrderDetails';
 
-const OrderDetailsModal = ({ onClose }) => {
+interface OrderDetailsModalProps {
+  onClose: () => void;
+}
+
+const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({ onClose }) => {
   return (
     <Modal title="" onClose={onClose}>
       <OrderDetails />
     </Modal>
   );
-};
-
-OrderDetailsModal.propTypes = {
-  onClose: PropTypes.func.isRequired,
 };
 
 export default OrderDetailsModal;

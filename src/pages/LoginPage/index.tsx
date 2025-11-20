@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styles from '../../styles/forms.module.css';
@@ -6,14 +6,15 @@ import { Button, EmailInput, PasswordInput } from '@ya.praktikum/react-developer
 import { NavLink } from 'react-router-dom';
 import { login } from '../../services/authSlice';
 import { useForm } from '../../hooks/useForm';
+import { AuthState } from '../../types';
 
 export default function LoginPage() {
-  const { values, handleChange, setValues } = useForm({ email: '', password: '' });
+  const { values, handleChange } = useForm({ email: '', password: '' });
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<any>();
   const navigate = useNavigate();
   const location = useLocation();
-  const { isLoading, loginError, isAuthenticated } = useSelector((state) => state.auth);
+  const { isLoading, error: loginError, isAuthenticated } = useSelector((state: any) => state.auth as AuthState);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -22,9 +23,9 @@ export default function LoginPage() {
     }
   }, [isAuthenticated, navigate, location]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(login({ email: values.email, password: values.password }));
+    dispatch(login({ email: values.email, password: values.password } as any));
   };
 
   return (

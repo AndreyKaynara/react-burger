@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { registerApi, loginApi, logoutApi, getUserDataApi, updateUserApi } from '../utils/api/authApi';
+import { registerApi, loginApi, logoutApi, getUserDataApi, updateUserApi } from '../api/authApi';
 import { setCookie, getCookie, deleteCookie } from '../utils/cookies';
 import { callWithTokenRefresh } from '../utils/callWithTokenRefresh';
 

@@ -7,6 +7,7 @@ import OrderDetailsModal from '../../components/OrderDetails/OrderDetailsModal';
 import { setIngredient } from '../../services/ingredientDetailsSlice';
 import { clearOrder } from '../../services/orderSlice';
 import styles from './HomePage.module.css';
+import { Ingredient } from '../../types';
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ export default function HomePage() {
   const dispatch = useDispatch();
   const [orderModalOpen, setOrderModalOpen] = React.useState(false);
 
-  const openIngredientModal = (ingredient) => {
+  const openIngredientModal = (ingredient: Ingredient) => {
     dispatch(setIngredient(ingredient));
     // Передаём текущий location как background
     navigate(`/ingredients/${ingredient._id}`, { state: { background: location } });

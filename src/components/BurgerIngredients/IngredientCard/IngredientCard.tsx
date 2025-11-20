@@ -1,13 +1,17 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { useDrag } from 'react-dnd';
 import styles from './IngredientCard.module.css';
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { ingredientPropType } from '../../../utils/prop-types';
+import { Ingredient } from '../../../types';
 
-const IngredientCard = ({ ingredient, onClick }) => {
-  const count = useSelector((state) => state.ingredients.counters[ingredient._id]);
+interface IngredientCardProps {
+  ingredient: Ingredient;
+  onClick: () => void;
+}
+
+const IngredientCard: React.FC<IngredientCardProps> = ({ ingredient, onClick }) => {
+  const count = useSelector((state: any) => state.ingredients.counters[ingredient._id]) as number;
 
   const [{ isDragging }, dragRef] = useDrag({
     type: 'ingredient',
@@ -27,11 +31,6 @@ const IngredientCard = ({ ingredient, onClick }) => {
       {count > 0 && <Counter count={count} size="default" />}
     </div>
   );
-};
-
-IngredientCard.propTypes = {
-  ingredient: ingredientPropType.isRequired,
-  onClick: PropTypes.func.isRequired,
 };
 
 export default IngredientCard;

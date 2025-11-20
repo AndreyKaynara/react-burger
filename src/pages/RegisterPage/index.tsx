@@ -1,17 +1,18 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, NavLink } from 'react-router-dom';
 import styles from '../../styles/forms.module.css';
 import { Button, EmailInput, PasswordInput, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import { register, clearError } from '../../services/authSlice';
 import { useForm } from '../../hooks/useForm';
+import { AuthState } from '../../types';
 
 export default function RegisterPage() {
   const { values, handleChange } = useForm({ name: '', email: '', password: '' });
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<any>();
   const navigate = useNavigate();
-  const { isLoading, error, isAuthenticated } = useSelector((state) => state.auth);
+  const { isLoading, error, isAuthenticated } = useSelector((state: any) => state.auth as AuthState);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -25,22 +26,30 @@ export default function RegisterPage() {
     };
   }, [dispatch]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(register(values));
+    dispatch(register(values as any));
   };
 
   const isDisabled = !values.name || !values.email || !values.password || isLoading;
 
   return (
     <div className={styles.container}>
-      <div className={styles.form}>
+      <form onSubmit={handleSubmit} className={styles.form}>
         <h1 className={`${styles.title} text text_type_main-medium mb-6`}>Регистрация</h1>
 
         {error && <p className={`text text_type_main-default text_color_error mb-4 ${styles.errorMessage}`}>{error}</p>}
 
         <div className="mb-6">
-          <Input type="text" placeholder="Имя" name="name" value={values.name} onChange={handleChange} />
+          <Input
+            {...({
+              type: 'text',
+              placeholder: 'Имя',
+              name: 'name',
+              value: values.name,
+              onChange: handleChange,
+            } as any)}
+          />
         </div>
 
         <div className="mb-6">
@@ -52,7 +61,7 @@ export default function RegisterPage() {
         </div>
 
         <div className={`mb-20 ${styles.buttonContainer}`}>
-          <Button htmlType="submit" type="primary" size="medium" onClick={handleSubmit} disabled={isDisabled}>
+          <Button htmlType="submit" type="primary" size="medium" disabled={isDisabled}>
             {isLoading ? 'Загрузка...' : 'Зарегистрироваться'}
           </Button>
         </div>
@@ -63,7 +72,7 @@ export default function RegisterPage() {
             Войти
           </NavLink>
         </p>
-      </div>
+      </form>
     </div>
   );
 }
