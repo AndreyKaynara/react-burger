@@ -35,44 +35,46 @@ export default function RegisterPage() {
 
   return (
     <div className={styles.container}>
-      <form onSubmit={handleSubmit} className={styles.form}>
+      <div className={styles.form}>
         <h1 className={`${styles.title} text text_type_main-medium mb-6`}>Регистрация</h1>
 
         {error && <p className={`text text_type_main-default text_color_error mb-4 ${styles.errorMessage}`}>{error}</p>}
 
-        <div className="mb-6">
-          <Input
-            {...({
-              type: 'text',
-              placeholder: 'Имя',
-              name: 'name',
-              value: values.name,
-              onChange: handleChange,
-            } as any)}
-          />
-        </div>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-6">
+            <Input
+              {...({
+                type: 'text',
+                placeholder: 'Имя',
+                name: 'name',
+                value: values.name,
+                onChange: handleChange,
+              } as any)}
+            />
+          </div>
 
-        <div className="mb-6">
-          <EmailInput placeholder="E-mail" name="email" value={values.email} onChange={handleChange} />
-        </div>
+          <div className="mb-6">
+            <EmailInput placeholder="E-mail" name="email" value={values.email} onChange={handleChange} />
+          </div>
 
-        <div className="mb-6">
-          <PasswordInput placeholder="Пароль" name="password" value={values.password} onChange={handleChange} />
-        </div>
+          <div className="mb-6">
+            <PasswordInput placeholder="Пароль" name="password" value={values.password} onChange={handleChange} />
+          </div>
 
-        <div className={`mb-20 ${styles.buttonContainer}`}>
-          <Button htmlType="submit" type="primary" size="medium" disabled={isDisabled}>
-            {isLoading ? 'Загрузка...' : 'Зарегистрироваться'}
-          </Button>
-        </div>
+          <div className={`mb-20 ${styles.buttonContainer}`}>
+            <Button htmlType="submit" type="primary" size="medium" disabled={isDisabled}>
+              {isLoading ? 'Загрузка...' : 'Зарегистрироваться'}
+            </Button>
+          </div>
 
-        <p className={`${styles.textCenter} text text_type_main-default text_color_inactive`}>
-          Уже зарегистрированы?{' '}
-          <NavLink to="/login" className={styles.link}>
-            Войти
-          </NavLink>
-        </p>
-      </form>
+          <p className={`${styles.textCenter} text text_type_main-default text_color_inactive`}>
+            Уже зарегистрированы?{' '}
+            <NavLink to="/login" className={styles.link}>
+              Войти
+            </NavLink>
+          </p>
+        </form>
+      </div>
     </div>
   );
 }
