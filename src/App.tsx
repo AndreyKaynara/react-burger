@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector, useDispatch } from './services/store';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import styles from './App.module.css';
 import ProtectedRouteElement from './components/ProtectedRouteElement/ProtectedRouteElement';
@@ -101,10 +101,10 @@ function AppRoutes() {
 // Компонент-обёртка для модального окна
 function IngredientDetailsModalRoute() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const params = useParams();
-  const ingredients = useSelector((state: any) => state.ingredients.data);
-  const selectedIngredient = useSelector((state: any) => state.ingredientDetails.ingredient);
+  const ingredients = useSelector((state) => state.ingredients.data);
+  const selectedIngredient = useSelector((state) => state.ingredientDetails.ingredient);
+  const dispatch = useDispatch();
 
   const ingredientId = params.id;
 
@@ -131,8 +131,8 @@ function IngredientDetailsModalRoute() {
 
 function App() {
   const dispatch: any = useDispatch();
-  const status: any = useSelector((state: any) => state.ingredients.status);
-  const { isLoading } = useSelector((state: any) => state.auth);
+  const status: any = useSelector((state) => state.ingredients.status);
+  const { isLoading } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (status === 'idle') {

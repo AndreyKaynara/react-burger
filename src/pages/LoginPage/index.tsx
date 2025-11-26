@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../services/store';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styles from '../../styles/forms.module.css';
 import { Button, EmailInput, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -11,10 +11,10 @@ import { AuthState } from '../../types';
 export default function LoginPage() {
   const { values, handleChange } = useForm({ email: '', password: '' });
 
-  const dispatch = useDispatch<any>();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const { isLoading, error: loginError, isAuthenticated } = useSelector((state: any) => state.auth as AuthState);
+  const { isLoading, error: loginError, isAuthenticated } = useSelector((state) => state.auth as AuthState);
 
   useEffect(() => {
     if (isAuthenticated) {

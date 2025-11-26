@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from '../../services/store';
 import { useNavigate } from 'react-router-dom';
 import { useDrop } from 'react-dnd';
 import { ConstructorElement, Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -28,8 +28,8 @@ interface DropCollectedProps {
 }
 
 const BurgerConstructor: React.FC<BurgerConstructorProps> = ({ openModal }) => {
-  const { bun, fillings, totalPrice } = useSelector((state: any) => state.burgerConstructor) as BurgerConstructorState;
-  const { isAuthenticated } = useSelector((state: any) => state.auth) as AuthState;
+  const { bun, fillings, totalPrice } = useSelector((state) => state.burgerConstructor) as BurgerConstructorState;
+  const { isAuthenticated } = useSelector((state) => state.auth) as AuthState;
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

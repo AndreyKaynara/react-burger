@@ -1,5 +1,5 @@
 import React, { useState, useRef, useMemo, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../services/store';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerIngredients.module.css';
 import scrollbarStyles from '../../styles/scrollbar.module.css';
@@ -19,7 +19,7 @@ function isIngredientType(value: string): value is IngredientType {
 
 const BurgerIngredients: React.FC<BurgerIngredientsProps> = ({ openModal }) => {
   const [currentTab, setCurrentTab] = useState<IngredientType>('bun');
-  const { data: ingredients, status, error } = useSelector((state: any) => state.ingredients as IngredientsState);
+  const { data: ingredients, status, error } = useSelector((state) => state.ingredients as IngredientsState);
 
   const ingredientsRef = useRef<HTMLDivElement>(null);
   const bunRef = useRef<HTMLDivElement>(null);

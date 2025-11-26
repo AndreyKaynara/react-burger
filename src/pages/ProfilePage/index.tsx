@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../services/store';
 import { Input, EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { logout, updateUser } from '../../services/authSlice';
 import styles from './ProfilePage.module.css';
@@ -8,9 +8,9 @@ import { useForm } from '../../hooks/useForm';
 import { AuthState, UserRegisterData } from '../../types';
 
 export default function ProfilePage() {
-  const dispatch = useDispatch<any>();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user, isLoading, error } = useSelector((state: any) => state.auth) as AuthState;
+  const { user, isLoading, error } = useSelector((state) => state.auth) as AuthState;
 
   const { values, handleChange, setValues } = useForm({ name: '', email: '', password: '' });
   const [isChanged, setIsChanged] = useState(false);

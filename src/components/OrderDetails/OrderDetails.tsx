@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../services/store';
 import { CheckMarkIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './OrderDetails.module.css';
 import { Order } from '../../types';
@@ -11,7 +11,7 @@ interface orderSelector {
 }
 
 const OrderDetails = () => {
-  const { data: order } = useSelector((state: any) => state.order as orderSelector);
+  const { data: order } = useSelector((state) => state.order as orderSelector);
   return (
     <div className={styles.content}>
       <p className={`text text_type_digits-large mb-8 ${styles.orderNumber}`}>{order.number}</p>

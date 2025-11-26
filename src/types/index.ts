@@ -9,4 +9,4 @@ export type {
 
 export type { User, UserRegisterData, UpdateUserData, Ingredient, IngredientInConstructor, Order } from './entities';
 
-export type { AuthState, IngredientsState, BurgerConstructorState, OrderState } from './states';
+export type { AuthState, IngredientsState, IngredientDetailsState, BurgerConstructorState, OrderState } from './states';

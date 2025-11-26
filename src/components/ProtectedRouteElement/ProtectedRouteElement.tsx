@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../services/store';
 import { Navigate, useLocation } from 'react-router-dom';
 import styles from '../../App.module.css';
 import { AuthState } from '../../types';
@@ -10,7 +10,7 @@ interface ProtectedRouteElementProps {
 }
 
 const ProtectedRouteElement: React.FC<ProtectedRouteElementProps> = ({ onlyUnAuth = false, children }) => {
-  const { isAuthenticated, isLoading } = useSelector((state: any) => state.auth as AuthState);
+  const { isAuthenticated, isLoading } = useSelector((state) => state.auth as AuthState);
   const location = useLocation();
 
   // Показываем загрузку пока проверяем авторизацию

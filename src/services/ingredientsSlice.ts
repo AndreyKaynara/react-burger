@@ -1,18 +1,21 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { getIngredientsApi } from '../api/ingredientsApi';
+import { Ingredient, IngredientsState } from '../types';
 
 export const fetchIngredients = createAsyncThunk('ingredients/fetchIngredients', async (_, { rejectWithValue }) => {
   return await getIngredientsApi();
 });
 
+const initialState: IngredientsState = {
+  data: [],
+  counters: {},
+  status: 'idle',
+  error: null,
+};
+
 const ingredientsSlice = createSlice({
   name: 'ingredients',
-  initialState: {
-    data: [],
-    counters: {},
-    status: 'idle',
-    error: null,
-  },
+  initialState,
   reducers: {
     incrementCounter: (state, action) => {
       state.counters[action.payload] = state.counters[action.payload] + 1;
@@ -34,10 +37,10 @@ const ingredientsSlice = createSlice({
         state.status = 'loading';
         state.error = null;
       })
-      .addCase(fetchIngredients.fulfilled, (state, action) => {
+      .addCase(fetchIngredients.fulfilled, (state, action: PayloadAction<Ingredient[]>) => {
         state.status = 'succeeded';
         state.data = action.payload;
-        state.counters = state.data.reduce((acc, item) => {
+        state.counters = state.data.reduce<Record<string, number>>((acc, item) => {
           acc[item._id] = 0;
           return acc;
         }, {});

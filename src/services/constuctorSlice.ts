@@ -1,6 +1,7 @@
-import { createSlice, nanoid } from '@reduxjs/toolkit';
+import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit';
+import { BurgerConstructorState, Ingredient, IngredientInConstructor } from '../types';
 
-const initialState = {
+const initialState: BurgerConstructorState = {
   bun: null,
   fillings: [],
   totalPrice: 0,
@@ -11,7 +12,7 @@ const constructorSlice = createSlice({
   initialState,
   reducers: {
     addIngredient: {
-      reducer: (state, action) => {
+      reducer: (state, action: PayloadAction<IngredientInConstructor>) => {
         // Булочка считается в двух экземплярах.
         if (action.payload.type === 'bun') {
           if (state.bun) {
@@ -25,7 +26,7 @@ const constructorSlice = createSlice({
         state.fillings.push(action.payload);
         state.totalPrice += action.payload.price;
       },
-      prepare: (ingredient) => {
+      prepare: (ingredient: Ingredient) => {
         return { payload: { ...ingredient, uuid: nanoid() } };
       },
     },
