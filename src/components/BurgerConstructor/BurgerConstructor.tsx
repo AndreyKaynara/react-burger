@@ -28,8 +28,8 @@ interface DropCollectedProps {
 }
 
 const BurgerConstructor: React.FC<BurgerConstructorProps> = ({ openModal }) => {
-  const { bun, fillings, totalPrice } = useSelector((state) => state.burgerConstructor) as BurgerConstructorState;
-  const { isAuthenticated } = useSelector((state) => state.auth) as AuthState;
+  const { bun, fillings, totalPrice } = useSelector((state) => state.burgerConstructor);
+  const { isAuthenticated } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -82,7 +82,7 @@ const BurgerConstructor: React.FC<BurgerConstructorProps> = ({ openModal }) => {
     // Указываем булочку дважды, так как есть верхняя и нижняя.
     const ingredientIds: string[] = [bun._id, ...fillings.map((item) => item._id), bun._id];
 
-    dispatch(createOrder(ingredientIds as any) as any)
+    dispatch(createOrder(ingredientIds))
       .unwrap()
       .then(() => {
         dispatch(clearConstructor(undefined));

@@ -1,17 +1,14 @@
 import React from 'react';
 import { CheckMarkIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './OrderSummary.module.css';
-import { Order } from '../../types';
+
 import { useSelector } from '../../types/store';
 
-interface orderSelector {
-  data: Order;
-  status: string;
-  error: string | null;
-}
-
 const OrderSummary: React.FC = () => {
-  const { data: order } = useSelector((state) => state.order as orderSelector);
+  const { data: order } = useSelector((state) => state.order);
+  if (order === null) {
+    return null;
+  }
   return (
     <div className={styles.content}>
       <p className={`text text_type_digits-large mb-8 glowText`}>{order.number}</p>

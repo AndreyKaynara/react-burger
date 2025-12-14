@@ -40,7 +40,7 @@ const OrderDetails: FC = () => {
         .then((o) => setOrder(o as OrderLike | null))
         .finally(() => setLoading(false));
     }
-  }, [feedOrder, userOrder, orderNumber]);
+  }, [order, feedOrder, userOrder, orderNumber]);
 
   const ingredientCounts = useMemo(() => {
     if (!order) return {} as Record<string, number>;
@@ -112,7 +112,9 @@ const OrderDetails: FC = () => {
               </div>
               <p className="text text_type_main-default">{ingredient.name}</p>
               <div className={styles.priceContainer}>
-                <p className="text text_type_digits-default">{count} x {ingredient.price}</p>
+                <p className="text text_type_digits-default">
+                  {count} x {ingredient.price}
+                </p>
                 <CurrencyIcon type="primary" />
               </div>
             </div>

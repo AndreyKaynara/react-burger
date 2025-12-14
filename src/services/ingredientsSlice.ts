@@ -2,9 +2,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { getIngredientsApi } from '../api/ingredientsApi';
 import { Ingredient, IngredientsState } from '../types';
 
-export const fetchIngredients = createAsyncThunk('ingredients/fetchIngredients', async (_, { rejectWithValue }) => {
-  return await getIngredientsApi();
-});
+export const fetchIngredients = createAsyncThunk('ingredients/fetchIngredients', getIngredientsApi);
 
 const initialState: IngredientsState = {
   data: [],

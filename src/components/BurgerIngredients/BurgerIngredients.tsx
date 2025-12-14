@@ -3,7 +3,6 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerIngredients.module.css';
 import scrollbarStyles from '../../styles/scrollbar.module.css';
 import IngredientSection from './IngredientSection/IngredientSection';
-import { IngredientsState } from '../../types';
 import { useSelector } from '../../types/store';
 
 interface BurgerIngredientsProps {
@@ -19,7 +18,7 @@ function isIngredientType(value: string): value is IngredientType {
 
 const BurgerIngredients: React.FC<BurgerIngredientsProps> = ({ openModal }) => {
   const [currentTab, setCurrentTab] = useState<IngredientType>('bun');
-  const { data: ingredients, status, error } = useSelector((state) => state.ingredients as IngredientsState);
+  const { data: ingredients, status, error } = useSelector((state) => state.ingredients);
 
   const ingredientsRef = useRef<HTMLDivElement>(null);
   const bunRef = useRef<HTMLDivElement>(null);

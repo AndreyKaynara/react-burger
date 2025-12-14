@@ -128,7 +128,7 @@ function IngredientDetailsModalRoute() {
 
   useEffect(() => {
     if (ingredientId && ingredients.length > 0) {
-      const ingredient = ingredients.find((item: any) => item._id === ingredientId);
+      const ingredient = ingredients.find((item) => item._id === ingredientId);
       if (ingredient) {
         dispatch(setIngredient(ingredient));
       }
@@ -159,8 +159,8 @@ function OrderDetailsModalRoute() {
 }
 
 function App() {
-  const dispatch: any = useDispatch();
-  const status: any = useSelector((state) => state.ingredients.status);
+  const dispatch = useDispatch();
+  const status = useSelector((state) => state.ingredients.status);
   const { isLoading } = useSelector((state) => state.auth);
 
   useEffect(() => {

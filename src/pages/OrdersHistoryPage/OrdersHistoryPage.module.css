@@ -14,3 +14,7 @@
 .content {
   flex: 1;
 }
+
+.error {
+  color: #E52B1A
+}

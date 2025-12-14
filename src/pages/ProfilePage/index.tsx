@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Input, EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { logout, updateUser } from '../../services/authSlice';
+import { updateUser } from '../../services/authSlice';
 import ProfileSidebar from '../../components/ProfileSidebar/ProfileSidebar';
 import styles from './ProfilePage.module.css';
 import { useForm } from '../../hooks/useForm';
@@ -57,7 +56,7 @@ export default function ProfilePage() {
     if (values.email !== user.email) userData.email = values.email;
     if (values.password) userData.password = values.password;
 
-    dispatch(updateUser(userData as any)).then((result: any) => {
+    dispatch(updateUser(userData)).then((result) => {
       if (result.type === 'auth/updateUser/fulfilled') {
         setValues((prev) => ({ ...prev, password: '' }));
       }

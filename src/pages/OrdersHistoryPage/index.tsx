@@ -31,11 +31,7 @@ const OrdersHistoryPage: FC = () => {
         <ProfileSidebar description="В этом разделе вы можете просмотреть свою историю заказов" />
 
         <div className={`${styles.content} pl-15`}>
-          {error && (
-            <p className="text text_type_main-default mb-4" style={{ color: '#E52B1A' }}>
-              Ошибка подключения: {error}
-            </p>
-          )}
+          {error && <p className={`text text_type_main-default mb-4 ${styles.error}`}>Ошибка подключения: {error}</p>}
           {!isConnected && !error && <p className="text text_type_main-default mb-4">Подключение к серверу...</p>}
           {isConnected && orders.length === 0 && (
             <p className="text text_type_main-default mb-4">У вас пока нет заказов</p>

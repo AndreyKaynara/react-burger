@@ -13,7 +13,7 @@ const ProfileSidebar: FC<ProfileSidebarProps> = ({ description }) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    dispatch(logout() as any).then(() => navigate('/login'));
+    dispatch(logout()).then(() => navigate('/login'));
   };
 
   return (
