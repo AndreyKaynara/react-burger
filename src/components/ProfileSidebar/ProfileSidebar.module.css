@@ -1,0 +1,18 @@
+.sidebar {
+  width: 320px;
+}
+
+.navLink {
+  display: block;
+  text-decoration: none;
+}
+
+.logoutButton {
+  display: block;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+}

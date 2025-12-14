@@ -1,7 +1,7 @@
 import React from 'react';
-import { useSelector } from '../../services/store';
 import styles from './IngredientDetails.module.css';
 import { Ingredient } from '../../types';
+import { useSelector } from '../../types/store';
 
 const IngredientDetails = () => {
   const ingredient = useSelector((state) => state.ingredientDetails.ingredient as Ingredient);

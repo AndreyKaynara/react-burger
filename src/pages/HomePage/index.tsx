@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import BurgerIngredients from '../../components/BurgerIngredients/BurgerIngredients';
 import BurgerConstructor from '../../components/BurgerConstructor/BurgerConstructor';
-import OrderDetailsModal from '../../components/OrderDetails/OrderDetailsModal';
+import OrderSummaryModal from '../../components/OrdersFeed/OrderSummaryModal';
 import { setIngredient } from '../../services/ingredientDetailsSlice';
 import { clearOrder } from '../../services/orderSlice';
 import styles from './HomePage.module.css';
@@ -42,7 +42,7 @@ export default function HomePage() {
         </div>
       </main>
 
-      {orderModalOpen && <OrderDetailsModal onClose={closeOrderModal} />}
+      {orderModalOpen && <OrderSummaryModal onClose={closeOrderModal} />}
     </>
   );
 }

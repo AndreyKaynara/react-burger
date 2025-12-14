@@ -19,7 +19,7 @@ const AppHeader = () => {
             )}
           </NavLink>
 
-          <NavLink to="/orders-list">
+          <NavLink to="/feed">
             {({ isActive }) => (
               <>
                 <ListIcon type={isActive ? 'primary' : 'secondary'} />

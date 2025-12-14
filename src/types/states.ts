@@ -1,4 +1,4 @@
-import type { User, Ingredient, IngredientInConstructor, Order } from './entities';
+import type { User, Ingredient, IngredientInConstructor, Order, OrderFromFeed } from './entities';
 
 export interface AuthState {
   user: User | null;
@@ -29,4 +29,12 @@ export interface OrderState {
   data: Order | null;
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null | undefined;
+}
+
+export interface FeedState {
+  orders: OrderFromFeed[];
+  total: number;
+  totalToday: number;
+  wsConnected: boolean;
+  error: string | null;
 }

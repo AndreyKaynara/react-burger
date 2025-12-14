@@ -1,4 +1,4 @@
-import { User, Ingredient, Order } from './entities';
+import { User, Ingredient, Order, OrderFromFeed } from './entities';
 
 export type UnsuccessApiResponse = {
   success: false;
@@ -50,3 +50,15 @@ export type LogoutApiResponse =
       message: string;
     }
   | UnsuccessApiResponse;
+
+export type FeedWsMessage =
+  | {
+      success: true;
+      orders: OrderFromFeed[];
+      total: number;
+      totalToday: number;
+    }
+  | {
+      success: false;
+      message: string;
+    };

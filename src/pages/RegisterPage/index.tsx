@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from '../../services/store';
 import { useNavigate, NavLink } from 'react-router-dom';
 import styles from '../../styles/forms.module.css';
 import { Button, EmailInput, PasswordInput, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import { register, clearError } from '../../services/authSlice';
 import { useForm } from '../../hooks/useForm';
 import { AuthState } from '../../types';
+import { useDispatch, useSelector } from '../../types/store';
 
 export default function RegisterPage() {
   const { values, handleChange } = useForm({ name: '', email: '', password: '' });

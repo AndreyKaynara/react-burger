@@ -1,6 +1,5 @@
 import React from 'react';
 import { useEffect } from 'react';
-import { useSelector, useDispatch } from './services/store';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import styles from './App.module.css';
 import ProtectedRouteElement from './components/ProtectedRouteElement/ProtectedRouteElement';
@@ -9,19 +8,21 @@ import AppHeader from './components/AppHeader/AppHeader';
 import HomePage from './pages/HomePage';
 import NotFoundPage from './pages/NotFoundPage';
 import IngredientPage from './pages/IngredientPage';
-import OrderList from './pages/OrderListPage';
 import LoginPage from './pages/LoginPage';
 import ProfilePage from './pages/ProfilePage';
 import RegisterPage from './pages/RegisterPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
-import OrderHistory from './pages/OrderHistory';
-
+import OrdersFeedPage from './pages/OrdersFeedPage';
+import OrdersHistoryPage from './pages/OrdersHistoryPage';
+import OrderDetails from './components/OrderDetails/OrderDetails';
+import OrderDetailsModal from './components/OrderDetails/OrderDetailsModal';
+import IngredientDetailsModal from './components/IngredientDetails/IngredientDetailsModal';
 import { checkAuth } from './services/authSlice';
 import { useNavigate, useParams } from 'react-router-dom';
 import { fetchIngredients } from './services/ingredientsSlice';
 import { setIngredient, clearIngredient } from './services/ingredientDetailsSlice';
-import IngredientDetailsModal from './components/IngredientDetails/IngredientDetailsModal';
+import { useDispatch, useSelector } from './types/store';
 
 function AppRoutes() {
   const location = useLocation();
@@ -32,8 +33,8 @@ function AppRoutes() {
       <Routes location={background || location}>
         <Route path="/" element={<HomePage />} />
         <Route path="/ingredients/:id" element={<IngredientPage />} />
-        <Route path="/orders-list" element={<OrderList />} />
-
+        <Route path="/feed" element={<OrdersFeedPage />} />
+        <Route path="/feed/:number" element={<OrderDetails />} />
         <Route
           path="/login"
           element={
@@ -81,7 +82,15 @@ function AppRoutes() {
           path="/profile/orders"
           element={
             <ProtectedRouteElement>
-              <OrderHistory />
+              <OrdersHistoryPage />
+            </ProtectedRouteElement>
+          }
+        />
+        <Route
+          path="/profile/orders/:number"
+          element={
+            <ProtectedRouteElement>
+              <OrderDetails />
             </ProtectedRouteElement>
           }
         />
@@ -92,13 +101,22 @@ function AppRoutes() {
       {background && (
         <Routes>
           <Route path="/ingredients/:id" element={<IngredientDetailsModalRoute />} />
+          <Route path="/feed/:number" element={<OrderDetailsModalRoute />} />
+          <Route
+            path="/profile/orders/:number"
+            element={
+              <ProtectedRouteElement>
+                <OrderDetailsModalRoute />
+              </ProtectedRouteElement>
+            }
+          />
         </Routes>
       )}
     </>
   );
 }
 
-// Компонент-обёртка для модального окна
+// Компонент-обёртка для модального окна ингредиента
 function IngredientDetailsModalRoute() {
   const navigate = useNavigate();
   const params = useParams();
@@ -127,6 +145,17 @@ function IngredientDetailsModalRoute() {
   }
 
   return <IngredientDetailsModal onClose={closeModal} />;
+}
+
+// Компонент-обёртка для модального окна заказа
+function OrderDetailsModalRoute() {
+  const navigate = useNavigate();
+
+  const closeModal = () => {
+    navigate(-1);
+  };
+
+  return <OrderDetailsModal onClose={closeModal} />;
 }
 
 function App() {

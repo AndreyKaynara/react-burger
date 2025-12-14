@@ -1,10 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { TypedUseSelectorHook, useDispatch as useDispatchHook, useSelector as useSelectorHook } from 'react-redux';
 import ingredientsReducer from './ingredientsSlice';
 import constructorReducer from './constuctorSlice';
 import ingredientDetailsReducer from './ingredientDetailsSlice';
 import orderReducer from './orderSlice';
 import authReducer from './authSlice';
+import feedSlice, { WS_FEED_ACTIONS } from './feedSlice';
+import userOrdersReducer, { WS_USER_ORDERS_ACTIONS } from './userOrdersSlice';
+import { createWebSocketMiddleware } from '../middlewares/websocketMiddleware';
+import { API_WS_ORDERS_URL, API_WS_USER_ORDERS_URL } from '../api/api';
+
+const feedMiddleware = createWebSocketMiddleware(API_WS_ORDERS_URL, WS_FEED_ACTIONS, false);
+const userOrdersMiddleware = createWebSocketMiddleware(API_WS_USER_ORDERS_URL, WS_USER_ORDERS_ACTIONS, true);
 
 export const store = configureStore({
   reducer: {
@@ -13,11 +19,8 @@ export const store = configureStore({
     ingredientDetails: ingredientDetailsReducer,
     order: orderReducer,
     auth: authReducer,
+    feed: feedSlice,
+    userOrders: userOrdersReducer,
   },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(feedMiddleware, userOrdersMiddleware),
 });
-
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
-
-export const useDispatch = () => useDispatchHook<AppDispatch>();
-export const useSelector: TypedUseSelectorHook<RootState> = useSelectorHook;

@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import { useDispatch, useSelector } from '../../services/store';
 import { useNavigate } from 'react-router-dom';
 import { useDrop } from 'react-dnd';
 import { ConstructorElement, Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -10,6 +9,7 @@ import { incrementCounter, decrementCounter, resetCounters } from '../../service
 import { createOrder } from '../../services/orderSlice';
 import ConstructorIngredient from './ConstructorIngredient/ConstructorIngredient';
 import { Ingredient, BurgerConstructorState } from '../../types';
+import { useDispatch, useSelector } from '../../types/store';
 
 interface BurgerConstructorProps {
   openModal: () => void;

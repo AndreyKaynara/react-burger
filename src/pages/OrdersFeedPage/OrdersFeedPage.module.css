@@ -1,0 +1,28 @@
+.pageContainer {
+  padding-top: 40px;
+}
+
+.contentGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.readyNumber {
+  color: #00CCCC;
+}
+
+.centerText {
+  text-align: center;
+}
+
+.errorText {
+  color: #E52B1A;
+  text-align: center;
+}

@@ -1,8 +1,8 @@
 import React from 'react';
-import { useSelector } from '../../services/store';
 import { Navigate, useLocation } from 'react-router-dom';
 import styles from '../../App.module.css';
 import { AuthState } from '../../types';
+import { useSelector } from '../../types/store';
 
 interface ProtectedRouteElementProps {
   onlyUnAuth?: boolean;

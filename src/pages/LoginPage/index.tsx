@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from '../../services/store';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styles from '../../styles/forms.module.css';
 import { Button, EmailInput, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -7,6 +6,7 @@ import { NavLink } from 'react-router-dom';
 import { login } from '../../services/authSlice';
 import { useForm } from '../../hooks/useForm';
 import { AuthState } from '../../types';
+import { useDispatch, useSelector } from '../../types/store';
 
 export default function LoginPage() {
   const { values, handleChange } = useForm({ email: '', password: '' });

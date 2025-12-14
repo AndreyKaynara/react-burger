@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from '../../services/store';
 import IngredientDetails from '../../components/IngredientDetails/IngredientDetails';
 import { setIngredient } from '../../services/ingredientDetailsSlice';
 import styles from './IngredientPage.module.css';
 import { Ingredient } from '../../types';
+import { useDispatch, useSelector } from '../../types/store';
 
 export default function IngredientPage() {
   const { id } = useParams();

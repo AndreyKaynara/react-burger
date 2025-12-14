@@ -1,10 +1,10 @@
 import React, { useState, useRef, useMemo, useEffect } from 'react';
-import { useSelector } from '../../services/store';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerIngredients.module.css';
 import scrollbarStyles from '../../styles/scrollbar.module.css';
 import IngredientSection from './IngredientSection/IngredientSection';
 import { IngredientsState } from '../../types';
+import { useSelector } from '../../types/store';
 
 interface BurgerIngredientsProps {
   openModal: (any: any) => void;
