@@ -38,7 +38,6 @@ const ConstructorIngredient: React.FC<ConstructorIngredientProps> = ({
   const [{ isOver }, dropRef] = useDrop<DragItem, void, DropCollectedProps>({
     accept: 'constructor-ingredient',
     hover: (draggedItem) => {
-      console.log(draggedItem);
       if (!ref.current) {
         return;
       }

@@ -1,11 +1,12 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import styles from './IngredientDetails.module.css';
-import { Ingredient } from '../../types';
+import { useSelector } from '../../types/store';
 
 const IngredientDetails = () => {
-  const ingredient = useSelector((state: any) => state.ingredientDetails.ingredient as Ingredient);
-
+  const ingredient = useSelector((state) => state.ingredientDetails.ingredient);
+  if (ingredient === null) {
+    return null;
+  }
   return (
     <div className={styles.content}>
       <img className={styles.image} src={ingredient.image_large} alt={ingredient.name}></img>

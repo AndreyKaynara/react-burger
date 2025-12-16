@@ -11,11 +11,10 @@
   padding-top: 80px;
 }
 
-
 .content {
   flex: 1;
 }
 
-.formContainer {
-  max-width: 480px;
+.error {
+  color: #E52B1A
 }

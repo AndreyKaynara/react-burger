@@ -1,17 +1,23 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { createOrderApi } from '../api/ordersApi';
+import { Order, OrderState } from '../types';
 
-export const createOrder = createAsyncThunk('constructor/createOrder', async (orderData, { rejectWithValue }) => {
-  return await createOrderApi(orderData);
-});
+export const createOrder = createAsyncThunk<Order, string[]>(
+  'constructor/createOrder',
+  async (orderData, { rejectWithValue }) => {
+    return await createOrderApi(orderData);
+  }
+);
+
+const initialState: OrderState = {
+  data: null,
+  status: 'idle',
+  error: null,
+};
 
 const orderSlice = createSlice({
   name: 'order',
-  initialState: {
-    data: null,
-    status: 'idle',
-    error: null,
-  },
+  initialState,
   reducers: {
     clearOrder: (state) => {
       state.data = null;
@@ -25,7 +31,7 @@ const orderSlice = createSlice({
         state.status = 'loading';
         state.error = null;
       })
-      .addCase(createOrder.fulfilled, (state, action) => {
+      .addCase(createOrder.fulfilled, (state, action: PayloadAction<Order>) => {
         state.status = 'succeeded';
         state.data = action.payload;
       })

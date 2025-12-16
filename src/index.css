@@ -10,3 +10,11 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
+
+.glowText {
+  text-shadow:
+    0 0 20px rgb(35, 35, 106),
+    0 0 30px rgb(35, 35, 106),
+    0 0 40px rgba(35, 35, 106, 0.8),
+    0 0 50px rgba(35, 35, 106, 0.5);
+}

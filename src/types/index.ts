@@ -5,8 +5,26 @@ export type {
   CreateOrderApiResponse,
   UserDataApiResponse,
   LogoutApiResponse,
+  FeedWsMessage,
 } from './api';
 
-export type { User, UserRegisterData, UpdateUserData, Ingredient, IngredientInConstructor, Order } from './entities';
+export type {
+  User,
+  UserRegisterData,
+  UpdateUserData,
+  Ingredient,
+  IngredientInConstructor,
+  Order,
+  OrderFromFeed,
+} from './entities';
 
-export type { AuthState, IngredientsState, BurgerConstructorState, OrderState } from './states';
+export type {
+  AuthState,
+  IngredientsState,
+  IngredientDetailsState,
+  BurgerConstructorState,
+  OrderState,
+  FeedState,
+} from './states';
+
+export type { RootState, AppDispatch, AppActions } from './store';

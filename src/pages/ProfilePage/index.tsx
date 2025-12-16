@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import { Input, EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { logout, updateUser } from '../../services/authSlice';
+import { updateUser } from '../../services/authSlice';
+import ProfileSidebar from '../../components/ProfileSidebar/ProfileSidebar';
 import styles from './ProfilePage.module.css';
 import { useForm } from '../../hooks/useForm';
 import { AuthState, UserRegisterData } from '../../types';
+import { useDispatch, useSelector } from '../../types/store';
 
 export default function ProfilePage() {
-  const dispatch = useDispatch<any>();
-  const navigate = useNavigate();
-  const { user, isLoading, error } = useSelector((state: any) => state.auth) as AuthState;
+  const dispatch = useDispatch();
+  const { user, isLoading, error } = useSelector((state) => state.auth) as AuthState;
 
   const { values, handleChange, setValues } = useForm({ name: '', email: '', password: '' });
   const [isChanged, setIsChanged] = useState(false);
@@ -36,10 +35,6 @@ export default function ProfilePage() {
     }
   }, [values, user]);
 
-  const handleLogout = () => {
-    dispatch(logout() as any).then(() => navigate('/login'));
-  };
-
   const handleCancel = () => {
     if (user) {
       setValues({
@@ -61,7 +56,7 @@ export default function ProfilePage() {
     if (values.email !== user.email) userData.email = values.email;
     if (values.password) userData.password = values.password;
 
-    dispatch(updateUser(userData as any)).then((result: any) => {
+    dispatch(updateUser(userData)).then((result) => {
       if (result.type === 'auth/updateUser/fulfilled') {
         setValues((prev) => ({ ...prev, password: '' }));
       }
@@ -71,38 +66,7 @@ export default function ProfilePage() {
   return (
     <div className={styles.container}>
       <div className={styles.wrapper}>
-        <div className={`${styles.sidebar} pr-15`}>
-          <nav className="mb-20">
-            <NavLink
-              to="/profile"
-              end
-              className={({ isActive }) =>
-                `${styles.navLink} mb-6 text text_type_main-medium${isActive ? '' : ' text_color_inactive'}`
-              }
-            >
-              Профиль
-            </NavLink>
-            <NavLink
-              to="/profile/orders"
-              className={({ isActive }) =>
-                `${styles.navLink} mb-6 text text_type_main-medium${isActive ? '' : ' text_color_inactive'}`
-              }
-            >
-              История заказов
-            </NavLink>
-            <button
-              onClick={handleLogout}
-              className={`${styles.logoutButton} text text_type_main-medium text_color_inactive`}
-              type="button"
-            >
-              Выход
-            </button>
-          </nav>
-
-          <p className="text text_type_main-default text_color_inactive">
-            В этом разделе вы можете изменить свои персональные данные
-          </p>
-        </div>
+        <ProfileSidebar description="В этом разделе вы можете изменить свои персональные данные" />
 
         <div className={`${styles.content} pl-15`}>
           <form onSubmit={handleSubmit} className={styles.formContainer}>

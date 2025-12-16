@@ -32,6 +32,32 @@ export interface IngredientInConstructor extends Ingredient {
   uuid: string;
 }
 
+export type OrderStatus = 'done' | 'pending' | 'created'; // пример возможных статусов
+
+export interface Owner {
+  name: string;
+  email: string;
+  createdAt: string;
+  updatedAt: string;
+}
 export interface Order {
+  _id: string;
   number: number;
+  name: string;
+  status: OrderStatus;
+  ingredients: Ingredient[];
+  owner: Owner;
+  price: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface OrderFromFeed {
+  _id: string;
+  ingredients: string[];
+  status: 'done' | 'pending' | 'created' | 'cancelled';
+  number: number;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
 }

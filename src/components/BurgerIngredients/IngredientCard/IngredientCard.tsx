@@ -1,9 +1,9 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { useDrag } from 'react-dnd';
 import styles from './IngredientCard.module.css';
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Ingredient } from '../../../types';
+import { useSelector } from '../../../types/store';
 
 interface IngredientCardProps {
   ingredient: Ingredient;
@@ -11,11 +11,11 @@ interface IngredientCardProps {
 }
 
 const IngredientCard: React.FC<IngredientCardProps> = ({ ingredient, onClick }) => {
-  const count = useSelector((state: any) => state.ingredients.counters[ingredient._id]) as number;
+  const count = useSelector((state) => state.ingredients.counters[ingredient._id]);
 
   const [{ isDragging }, dragRef] = useDrag({
     type: 'ingredient',
-    item: { ingredient }, // передаём весь объект
+    item: { ingredient },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
