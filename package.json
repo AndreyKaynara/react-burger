@@ -1,6 +1,7 @@
 {
   "name": "react-burger",
   "version": "0.1.0",
+  "homepage": "./",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^2.9.0",
@@ -35,7 +36,9 @@
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "test:e2e": "cypress run --spec 'cypress/e2e/constructor.cy.js'",
-    "test:e2e:headed": "cypress run --headed --spec 'cypress/e2e/constructor.cy.js'"
+    "test:e2e:headed": "cypress run --headed --spec 'cypress/e2e/constructor.cy.js'",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -59,6 +62,7 @@
     "@types/js-cookie": "^3.0.6",
     "cypress": "^15.8.1",
     "fetch-mock": "^12.6.0",
+    "gh-pages": "^6.3.0",
     "prettier": "^3.6.2"
   }
 }
