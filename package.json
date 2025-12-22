@@ -1,7 +1,7 @@
 {
   "name": "react-burger",
   "version": "0.1.0",
-  "homepage": "./",
+  "homepage": "https://andreykaynara.github.io/react-burger",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^2.9.0",

@@ -1,6 +1,6 @@
 # Deployed Project
 
-https://github.com/AndreyKaynara/react-burger/
+https://andreykaynara.github.io/react-burger/
 
 # Getting Started with Create React App
 
