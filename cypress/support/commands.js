@@ -1,3 +1,4 @@
+import { SEL } from './selectors';
 // Команда для авторизации
 Cypress.Commands.add('login', (email, password) => {
   cy.visit('/login');
@@ -9,9 +10,9 @@ Cypress.Commands.add('login', (email, password) => {
 
 // Команда для перетаскивания ингредиента
 Cypress.Commands.add('dragIngredient', (ingredientName) => {
-  cy.contains(ingredientName).parents('[class*="itemCard"]').as('ingredient');
+  cy.contains(ingredientName).parents(SEL.itemCard).as('ingredient');
 
-  cy.get('[class*="burgerConstructor"]').find('[class*="list"]').first().as('constructor');
+  cy.get(SEL.burgerConstructor).find('[class*="list"]').first().as('constructor');
 
   const dataTransfer = new DataTransfer();
   // Установим хотя бы один тип данных, чтобы HTML5 backend не игнорировал dnd
@@ -27,7 +28,7 @@ Cypress.Commands.add('dragIngredient', (ingredientName) => {
 // Команда для ожидания загрузки ингредиентов
 Cypress.Commands.add('waitForIngredients', () => {
   // Ждем появления хотя бы одной карточки ингредиента на странице
-  cy.get('[class*="itemCard"]', { timeout: 15000 }).should('have.length.greaterThan', 0);
+  cy.get(SEL.itemCard, { timeout: 15000 }).should('have.length.greaterThan', 0);
 });
 
 // Универсальная команда для HTML5 DnD: перетащить элемент (по алиасу) в конструктор
@@ -36,17 +37,17 @@ Cypress.Commands.add('dndToConstructor', (alias) => {
   try {
     dataTransfer.setData('text/plain', '{}');
   } catch (e) {}
-  cy.get('[class*="burgerConstructor"]').find('[class*="list"]').first().scrollIntoView();
+  cy.get(SEL.burgerConstructor).find('[class*="list"]').first().scrollIntoView();
   cy.get(alias).trigger('dragstart', { dataTransfer, force: true });
-  cy.get('[class*="burgerConstructor"]')
+  cy.get(SEL.burgerConstructor)
     .find('[class*="list"]')
     .first()
     .trigger('dragenter', { dataTransfer, force: true });
-  cy.get('[class*="burgerConstructor"]')
+  cy.get(SEL.burgerConstructor)
     .find('[class*="list"]')
     .first()
     .trigger('dragover', { dataTransfer, force: true, clientX: 10, clientY: 10 });
-  cy.get('[class*="burgerConstructor"]').find('[class*="list"]').first().trigger('drop', { dataTransfer, force: true });
+  cy.get(SEL.burgerConstructor).find('[class*="list"]').first().trigger('drop', { dataTransfer, force: true });
   cy.get(alias).trigger('dragend', { force: true });
 });
 

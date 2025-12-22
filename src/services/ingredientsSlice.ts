@@ -16,7 +16,9 @@ const ingredientsSlice = createSlice({
   initialState,
   reducers: {
     incrementCounter: (state, action) => {
-      state.counters[action.payload] = state.counters[action.payload] + 1;
+      const id = action.payload as string;
+      const current = state.counters[id] ?? 0;
+      state.counters[id] = current + 1;
     },
     decrementCounter: (state, action) => {
       const current = state.counters[action.payload];
