@@ -4,7 +4,7 @@ import { setCookie, getCookie, deleteCookie } from '../utils/cookies';
 import { callWithTokenRefresh } from '../utils/callWithTokenRefresh';
 import { AuthState, UserRegisterData, UpdateUserData, User } from '../types';
 
-const initialState: AuthState = {
+export const initialState: AuthState = {
   user: null,
   accessToken: null,
   isAuthenticated: false,

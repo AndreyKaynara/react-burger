@@ -1,4 +1,4 @@
-import reducer, { incrementCounter, decrementCounter, resetCounters } from './ingredientsSlice';
+import reducer, { incrementCounter, decrementCounter, resetCounters, initialState } from './ingredientsSlice';
 import { fetchIngredients } from './ingredientsSlice';
 
 const makeIngredient = (over = {}) => ({
@@ -19,12 +19,7 @@ const makeIngredient = (over = {}) => ({
 
 describe('ingredientsSlice', () => {
   it('возвращает начальное состояние', () => {
-    expect(reducer(undefined, { type: 'unknown' })).toEqual({
-      data: [],
-      counters: {},
-      status: 'idle',
-      error: null,
-    });
+    expect(reducer(undefined, { type: 'unknown' })).toEqual(initialState);
   });
 
   it('incrementCounter увеличивает счётчик', () => {

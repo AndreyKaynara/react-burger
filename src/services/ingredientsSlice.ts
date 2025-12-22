@@ -4,7 +4,7 @@ import { Ingredient, IngredientsState } from '../types';
 
 export const fetchIngredients = createAsyncThunk('ingredients/fetchIngredients', getIngredientsApi);
 
-const initialState: IngredientsState = {
+export const initialState: IngredientsState = {
   data: [],
   counters: {},
   status: 'idle',

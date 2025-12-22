@@ -9,7 +9,7 @@ export const createOrder = createAsyncThunk<Order, string[]>(
   }
 );
 
-const initialState: OrderState = {
+export const initialState: OrderState = {
   data: null,
   status: 'idle',
   error: null,

@@ -1,9 +1,9 @@
-import reducer, { setIngredient, clearIngredient } from './ingredientDetailsSlice';
+import reducer, { setIngredient, clearIngredient, initialState } from './ingredientDetailsSlice';
 
 describe('ingredientDetailsSlice reducer', () => {
   it('возвращает начальное состояние при неизвестном действии', () => {
     const state = reducer(undefined, { type: 'unknown' });
-    expect(state).toEqual({ ingredient: null });
+    expect(state).toEqual(initialState);
   });
 
   it('обрабатывает setIngredient', () => {

@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Ingredient, IngredientDetailsState } from '../types';
 
-const initialState: IngredientDetailsState = {
+export const initialState: IngredientDetailsState = {
   ingredient: null,
 };
 

@@ -1,4 +1,4 @@
-import reducer, { addIngredient, removeIngredient, clearConstructor, reorderIngredients } from './constuctorSlice';
+import reducer, { addIngredient, removeIngredient, clearConstructor, reorderIngredients, initialState } from './constuctorSlice';
 
 const bun = {
   _id: 'bun1',
@@ -30,15 +30,14 @@ const filling = {
   __v: 0,
 };
 
-const initial = { bun: null, fillings: [], totalPrice: 0 };
 
 describe('constructorSlice', () => {
   it('возвращает начальное состояние', () => {
-    expect(reducer(undefined, { type: 'unknown' })).toEqual(initial);
+    expect(reducer(undefined, { type: 'unknown' })).toEqual(initialState);
   });
 
   it('addIngredient добавляет булку и считает итоговую цену x2, заменяя предыдущую булку', () => {
-    let state = reducer(initial, addIngredient(bun));
+    let state = reducer(initialState, addIngredient(bun));
     expect(state.bun?.type).toBe('bun');
     expect(state.totalPrice).toBe(bun.price * 2);
 
@@ -49,14 +48,14 @@ describe('constructorSlice', () => {
   });
 
   it('addIngredient добавляет начинку и обновляет итоговую цену', () => {
-    const state = reducer(initial, addIngredient(filling));
+    const state = reducer(initialState, addIngredient(filling));
     expect(state.fillings.length).toBe(1);
     expect(state.fillings[0]).toHaveProperty('uuid');
     expect(state.totalPrice).toBe(filling.price);
   });
 
   it('removeIngredient удаляет булку и вычитает цену x2', () => {
-    let state = reducer(initial, addIngredient(bun));
+    let state = reducer(initialState, addIngredient(bun));
     const prevPrice = state.totalPrice;
     // remove by passing bun payload
     state = reducer(state, removeIngredient(state.bun));
@@ -65,7 +64,7 @@ describe('constructorSlice', () => {
   });
 
   it('removeIngredient удаляет конкретную начинку по uuid и вычитает её цену', () => {
-    let state = reducer(initial, addIngredient(filling));
+    let state = reducer(initialState, addIngredient(filling));
     const fillingWithUuid = state.fillings[0];
     const prevPrice = state.totalPrice;
     state = reducer(state, removeIngredient(fillingWithUuid));
@@ -74,15 +73,15 @@ describe('constructorSlice', () => {
   });
 
   it('clearConstructor сбрасывает состояние к начальному', () => {
-    let state = reducer(initial, addIngredient(bun));
+    let state = reducer(initialState, addIngredient(bun));
     state = reducer(state, addIngredient(filling));
     state = reducer(state, clearConstructor());
-    expect(state).toEqual(initial);
+    expect(state).toEqual(initialState);
   });
 
   it('reorderIngredients перемещает элемент внутри начинки', () => {
     // add two fillings
-    let state = reducer(initial, addIngredient({ ...filling, _id: 'f1', price: 10 }));
+    let state = reducer(initialState, addIngredient({ ...filling, _id: 'f1', price: 10 }));
     state = reducer(state, addIngredient({ ...filling, _id: 'f2', price: 20 }));
     const first = state.fillings[0];
     const second = state.fillings[1];

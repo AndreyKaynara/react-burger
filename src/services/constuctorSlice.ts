@@ -1,7 +1,7 @@
 import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit';
 import { BurgerConstructorState, Ingredient, IngredientInConstructor } from '../types';
 
-const initialState: BurgerConstructorState = {
+export const initialState: BurgerConstructorState = {
   bun: null,
   fillings: [],
   totalPrice: 0,
