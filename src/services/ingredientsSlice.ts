@@ -4,7 +4,7 @@ import { Ingredient, IngredientsState } from '../types';
 
 export const fetchIngredients = createAsyncThunk('ingredients/fetchIngredients', getIngredientsApi);
 
-const initialState: IngredientsState = {
+export const initialState: IngredientsState = {
   data: [],
   counters: {},
   status: 'idle',
@@ -16,7 +16,9 @@ const ingredientsSlice = createSlice({
   initialState,
   reducers: {
     incrementCounter: (state, action) => {
-      state.counters[action.payload] = state.counters[action.payload] + 1;
+      const id = action.payload as string;
+      const current = state.counters[id] ?? 0;
+      state.counters[id] = current + 1;
     },
     decrementCounter: (state, action) => {
       const current = state.counters[action.payload];
